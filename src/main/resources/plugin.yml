@@ -1,0 +1,14 @@
+name: dead-by-minecraft
+version: 0.0.1-DEV
+description: Dead by Daylight, but in Minecraft!
+author: Ryan Jones
+website: wordandahalf.org
+
+main: org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
+api-version: 1.16
+depend: [ProtocolLib, Citizens]
+
+commands:
+  dbm:
+    description: Internal use only.
+    usage:
