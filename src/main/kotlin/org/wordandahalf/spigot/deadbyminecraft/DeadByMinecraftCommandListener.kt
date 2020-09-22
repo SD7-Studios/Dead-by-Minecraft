@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.BookMeta
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.item.ScriptableItemStack
 import java.lang.NumberFormatException
 
 class DeadByMinecraftCommandListener : CommandExecutor
@@ -168,10 +169,15 @@ class DeadByMinecraftCommandListener : CommandExecutor
     {
         override fun execute(sender: Player, args: Array<out String>): Boolean
         {
+            val itemStack = ScriptableItemStack.getItem(args[1])
+
+            if(itemStack is ItemStack)
+                sender.inventory.addItem(itemStack)
+
             return true
         }
 
-        override fun getNumberOfArguments(): Int { return 3 }
+        override fun getNumberOfArguments(): Int { return 2 }
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean

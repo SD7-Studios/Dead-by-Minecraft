@@ -9,11 +9,13 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.util.Vector
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftLobbyState
+import org.wordandahalf.spigot.deadbyminecraft.item.ScriptableItemStack
 
 class DeadByMinecraftEventListener : Listener
 {
@@ -94,6 +96,11 @@ class DeadByMinecraftEventListener : Listener
         if(DeadByMinecraftPlayer.of(e.player).getGame() is DeadByMinecraftGame)
         {
             e.isCancelled = true
+            return
+        }
+
+        if(e.item is ItemStack) {
+            ScriptableItemStack.getExecutor(e.item as ItemStack)?.accept(e, e.item as ItemStack)
         }
     }
 }
