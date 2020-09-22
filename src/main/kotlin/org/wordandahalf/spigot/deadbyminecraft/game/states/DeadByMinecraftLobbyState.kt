@@ -10,6 +10,7 @@ import org.bukkit.util.Vector
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.item.menu.HotbarMenu
 
 class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGameState(game)
 {
@@ -36,11 +37,12 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
             playerNpcs[nextIndex] = npc
         }
 
+        HotbarMenu.Lobby.DEFAULT_MENU.display(player.bukkit)
         player.bukkit.gameMode = GameMode.ADVENTURE
         player.bukkit.velocity = Vector().zero()
-        player.bukkit.teleport(DeadByMinecraftPlugin.Config.getGameWorldLobbySpawnLocation())
         player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0, true, false, false))
         player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false, false))
+        player.bukkit.teleport(DeadByMinecraftPlugin.Config.getGameWorldLobbySpawnLocation())
     }
 
     override fun onPlayerLeave(player: DeadByMinecraftPlayer)
@@ -52,6 +54,7 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
         player.bukkit.removePotionEffect(PotionEffectType.SLOW)
         player.bukkit.removePotionEffect(PotionEffectType.INVISIBILITY)
         player.bukkit.teleport(DeadByMinecraftPlugin.Config.getDefaultWorld().spawnLocation)
+        HotbarMenu.EMPTY.display(player.bukkit)
     }
 
     /**

@@ -7,19 +7,20 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
 import java.util.function.BiConsumer
-import kotlin.reflect.KClass
 
-abstract class ScriptableItemStack(private val executorClass: KClass<out Executor>)
+/**
+ * An ItemStack that will execute a snippet of code when used (right-clicked or left-clicked)
+ */
+abstract class ScriptableItemStack(private val executor: Executor)
 {
     abstract class Executor : BiConsumer<PlayerInteractEvent, ItemStack>
     companion object
     {
         private val registeredExecutors = HashMap<String, Executor>()
 
-        fun registerExecutor(executor: Executor, id: String)
+        fun isScriptableItemStack(itemStack: ItemStack) : Boolean
         {
-            DeadByMinecraftPlugin.Logger.info("Registered '${id}'!")
-            registeredExecutors.putIfAbsent(id, executor)
+            return itemStack.itemMeta!!.persistentDataContainer.has(NamespacedKey(DeadByMinecraftPlugin.Instance, "executor"), PersistentDataType.STRING)
         }
 
         fun getExecutor(itemStack: ItemStack) : Executor?
@@ -32,14 +33,13 @@ abstract class ScriptableItemStack(private val executorClass: KClass<out Executo
             ]
         }
 
-        @Deprecated("Please, please, please stop using this!")
+        @Deprecated("Please, please, please! Don't use this!")
         fun getItem(className: String) : ItemStack?
         {
             val clazz = Class.forName(className)
 
             if(clazz.superclass.name == ScriptableItemStack::class.java.name)
             {
-                DeadByMinecraftPlugin.Logger.info("Class is superclass!")
                 return ((clazz as Class<out Executor>).constructors[0].newInstance() as ScriptableItemStack).toItemStack()
             }
 
@@ -49,7 +49,7 @@ abstract class ScriptableItemStack(private val executorClass: KClass<out Executo
 
     init
     {
-        registerExecutor(executorClass.java.constructors[0].newInstance() as Executor, executorClass.java.name)
+        registeredExecutors.putIfAbsent(this.getID(), executor)
     }
 
     fun toItemStack() : ItemStack
@@ -58,7 +58,7 @@ abstract class ScriptableItemStack(private val executorClass: KClass<out Executo
         // stack.itemMeta should never be null, otherwise hell must've frozen over
         val meta = stack.itemMeta!!
 
-        meta.persistentDataContainer.set(NamespacedKey(DeadByMinecraftPlugin.Instance, "executor"), PersistentDataType.STRING, executorClass.java.name)
+        meta.persistentDataContainer.set(NamespacedKey(DeadByMinecraftPlugin.Instance, "executor"), PersistentDataType.STRING, this.getID())
         meta.setDisplayName(getDisplayName())
         meta.isUnbreakable = true
 
@@ -67,7 +67,8 @@ abstract class ScriptableItemStack(private val executorClass: KClass<out Executo
         return stack
     }
 
-    fun getDisplayName() : String { return getMaterial().name }
+    fun getDisplayName() : String? { return null }
     abstract fun getMaterial() : Material
     fun getAmount() : Int { return 1 }
+    fun getID() : String { return this.toString() + this.executor.toString() }
 }

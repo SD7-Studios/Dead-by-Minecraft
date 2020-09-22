@@ -93,14 +93,14 @@ class DeadByMinecraftEventListener : Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerInteract(e: PlayerInteractEvent)
     {
+        if(e.item is ItemStack && ScriptableItemStack.isScriptableItemStack(e.item!!)) {
+            ScriptableItemStack.getExecutor(e.item as ItemStack)?.accept(e, e.item as ItemStack)
+        }
+
         if(DeadByMinecraftPlayer.of(e.player).getGame() is DeadByMinecraftGame)
         {
             e.isCancelled = true
             return
-        }
-
-        if(e.item is ItemStack) {
-            ScriptableItemStack.getExecutor(e.item as ItemStack)?.accept(e, e.item as ItemStack)
         }
     }
 }
