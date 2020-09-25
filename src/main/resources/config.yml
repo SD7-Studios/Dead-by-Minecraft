@@ -13,4 +13,4 @@ lobby:
 game:
   world-name: dbm-game-world
 default-world:
-  name: dead-by-minecraft-development
+  name: world
