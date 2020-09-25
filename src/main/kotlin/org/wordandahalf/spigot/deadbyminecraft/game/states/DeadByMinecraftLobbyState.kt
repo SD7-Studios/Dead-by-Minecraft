@@ -9,6 +9,7 @@ import org.bukkit.entity.EntityType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftPlayer
@@ -16,7 +17,7 @@ import org.wordandahalf.spigot.deadbyminecraft.item.menu.HotbarMenu
 
 class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGameState(game)
 {
-    private val playerNpcs : Array<NPC?> = arrayOfNulls(DeadByMinecraftPlugin.Config.maxPlayers())
+    private val playerNpcs : Array<NPC?> = arrayOfNulls(DeadByMinecraftConfig.maxPlayers())
 
     /**
      * Called when the parent DeadByMinecraftGame switches to this state, after #onLeave()
@@ -31,12 +32,12 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
     override fun onPlayerJoin(player: DeadByMinecraftPlayer)
     {
         // If there is an available position and NPCs are enabled
-        if(playerNpcs.indexOf(null) != -1 && DeadByMinecraftPlugin.Config.areLobbyNPCsEnabled())
+        if(playerNpcs.indexOf(null) != -1 && DeadByMinecraftConfig.areLobbyNPCsEnabled())
         {
             val nextIndex = playerNpcs.indexOf(null)
             val npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, player.bukkit.displayName)
 
-            val positions = DeadByMinecraftPlugin.Config.lobbyNPCSpawnLocations()[nextIndex]
+            val positions = DeadByMinecraftConfig.lobbyNPCSpawnLocations()[nextIndex]
 
             npc.spawn(Location(game.bukkitLobbyWorld(), positions[0], positions[1], positions[2]))
             playerNpcs[nextIndex] = npc
@@ -46,7 +47,7 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
         HotbarMenu.Lobby.DEFAULT_MENU.display(player.bukkit)
 
         // Teleport the player
-        val positions = DeadByMinecraftPlugin.Config.lobbySpawnLocation()
+        val positions = DeadByMinecraftConfig.lobbySpawnLocation()
         player.bukkit.teleport(Location(game.bukkitLobbyWorld(), positions[0], positions[1], positions[2], positions[3].toFloat(), positions[4].toFloat()))
 
         player.bukkit.gameMode = GameMode.ADVENTURE
@@ -73,7 +74,7 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
 
         player.bukkit.removePotionEffect(PotionEffectType.SLOW)
         player.bukkit.removePotionEffect(PotionEffectType.INVISIBILITY)
-        player.bukkit.teleport(Bukkit.getWorld(DeadByMinecraftPlugin.Config.defaultWorldName())!!.spawnLocation)
+        player.bukkit.teleport(Bukkit.getWorld(DeadByMinecraftConfig.defaultWorldName())!!.spawnLocation)
 
         // Remove any hotbar menu
         HotbarMenu.EMPTY.display(player.bukkit)
