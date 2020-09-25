@@ -58,9 +58,17 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
     override fun onPlayerLeave(player: DeadByMinecraftPlayer)
     {
         // Remove the player's NPC
-        playerNpcs.filter { it?.name == player.bukkit.displayName }.forEach {
-            it?.destroy()
-            it?.owningRegistry?.deregister(it)
+        for (i in playerNpcs.indices)
+        {
+            val npc = playerNpcs[i]
+
+            if(npc?.name == player.bukkit.displayName)
+            {
+                npc.destroy()
+                npc.owningRegistry.deregister(npc)
+
+                playerNpcs[i] = null
+            }
         }
 
         player.bukkit.removePotionEffect(PotionEffectType.SLOW)
