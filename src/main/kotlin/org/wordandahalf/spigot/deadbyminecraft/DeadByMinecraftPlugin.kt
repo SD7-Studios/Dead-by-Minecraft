@@ -12,6 +12,7 @@ import java.lang.Exception
 import java.util.*
 import java.util.logging.Logger
 import kotlin.collections.ArrayList
+import java.lang.Integer
 
 class DeadByMinecraftPlugin() : JavaPlugin()
 {
@@ -19,20 +20,31 @@ class DeadByMinecraftPlugin() : JavaPlugin()
     {
         private const val MAX_PLAYERS_PATH = "max-players"
 
-        private const val GAME_WORLD_NAME_PATH = "game.world-name"
         private const val LOBBY_WORLD_NAME_PATH = "lobby.world-name"
-
+        private const val LOBBY_WORLD_TIME_PATH = "lobby.time"
         private const val LOBBY_SPAWN_LOCATION_PATH = "lobby.spawn-location"
         private const val LOBBY_SPAWN_ROTATION_PATH = "lobby.spawn-rotation"
-
         private const val LOBBY_NPCS_ENABLED_PATH = "lobby.npcs.enabled"
         private const val LOBBY_NPCS_LOCATIONS_PATH = "lobby.npcs.locations"
+
+        private const val GAME_WORLD_NAME_PATH = "game.world-name"
+        private const val GAME_WORLD_TIME_PATH = "game.time"
 
         private const val DEFAULT_WORLD_NAME_PATH = "default-world.name"
 
         fun get(key: String) : Any?
         {
             return Instance.config.get(key)
+        }
+
+        fun defaultWorldName() : String
+        {
+            val defaultWorldName : Any? = get(DEFAULT_WORLD_NAME_PATH)
+
+            if(defaultWorldName !is String)
+                throw InvalidConfigurationException("$DEFAULT_WORLD_NAME_PATH needs to be a string (word)!")
+
+            return defaultWorldName
         }
 
         fun maxPlayers() : Int
@@ -45,20 +57,20 @@ class DeadByMinecraftPlugin() : JavaPlugin()
             return maxPlayers.toInt()
         }
 
-        fun gameWorldName() : String
-        {
-            if(get(GAME_WORLD_NAME_PATH) !is String)
-                throw InvalidConfigurationException("$GAME_WORLD_NAME_PATH must be a string (word)!")
-
-            return get(GAME_WORLD_NAME_PATH) as String
-        }
-
         fun lobbyWorldName() : String
         {
             if(get(LOBBY_WORLD_NAME_PATH) !is String)
                 throw InvalidConfigurationException("$LOBBY_WORLD_NAME_PATH must be a string (word)!")
 
             return get(LOBBY_WORLD_NAME_PATH) as String
+        }
+
+        fun lobbyWorldTime() : Integer
+        {
+            if(get(LOBBY_WORLD_TIME_PATH) !is Integer)
+                throw InvalidConfigurationException("$LOBBY_WORLD_TIME_PATH must be an integer!")
+
+            return get(LOBBY_WORLD_TIME_PATH) as Integer
         }
 
         fun lobbySpawnLocation(): Array<Double>
@@ -107,14 +119,20 @@ class DeadByMinecraftPlugin() : JavaPlugin()
             return enabled
         }
 
-        fun defaultWorldName() : String
+        fun gameWorldName() : String
         {
-            val defaultWorldName : Any? = get(DEFAULT_WORLD_NAME_PATH)
+            if(get(GAME_WORLD_NAME_PATH) !is String)
+                throw InvalidConfigurationException("$GAME_WORLD_NAME_PATH must be a string (word)!")
 
-            if(defaultWorldName !is String)
-                throw InvalidConfigurationException("$DEFAULT_WORLD_NAME_PATH needs to be a string (word)!")
+            return get(GAME_WORLD_NAME_PATH) as String
+        }
 
-            return defaultWorldName
+        fun gameWorldTime() : Integer
+        {
+            if(get(GAME_WORLD_TIME_PATH) !is Integer)
+                throw InvalidConfigurationException("$GAME_WORLD_TIME_PATH must be an integer!")
+
+            return get(GAME_WORLD_TIME_PATH) as Integer
         }
     }
 
@@ -166,8 +184,7 @@ class DeadByMinecraftPlugin() : JavaPlugin()
             val world = lobbyWorld.clone(LOBBY_WORLD_PREFIX + UUID.randomUUID().toString())
             (Bukkit.getPluginManager().getPlugin("SlimeWorldManager") as SlimePlugin).generateWorld(world)
 
-            Logger.info("Cloning lobby world with name '${world.name}'")
-            Logger.info("Loaded worlds: " + Bukkit.getWorlds().joinToString { it.name })
+            Bukkit.getWorld(world.name)!!.time = Config.lobbyWorldTime().toLong()
 
             return world
         }
@@ -177,8 +194,7 @@ class DeadByMinecraftPlugin() : JavaPlugin()
             val world = gameWorld.clone(GAME_WORLD_PREFIX + UUID.randomUUID().toString())
             (Bukkit.getPluginManager().getPlugin("SlimeWorldManager") as SlimePlugin).generateWorld(world)
 
-            Logger.info("Cloning game world with name '${world.name}'")
-            Logger.info("Loaded worlds: " + Bukkit.getWorlds().joinToString { it.name })
+            Bukkit.getWorld(world.name)!!.time = Config.gameWorldTime().toLong()
 
             return world
         }

@@ -1,6 +1,9 @@
+default-world:
+  name: world
 max-players: 4
 lobby:
   world-name: dbm-lobby-world
+  time: 18000
   spawn-location: [0.0, 6.0, 0.0]
   spawn-rotation: [-166.0, 3.0]
   npcs:
@@ -12,5 +15,4 @@ lobby:
       - [13.5, 5.0, -8.5]
 game:
   world-name: dbm-game-world
-default-world:
-  name: world
+  time: 18000
