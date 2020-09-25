@@ -42,7 +42,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
             sendMessage(player.bukkit.displayName + " has joined the game!")
             players.add(player)
             player.data.gameID = id
-            player.data.save()
+            player.saveData()
             return true
         }
 
@@ -58,7 +58,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
 
             state.onPlayerLeave(player)
             player.data.gameID = null
-            player.data.delete()
+            player.deleteData()
             it.remove()
         }
     }
@@ -70,7 +70,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
             state.onPlayerLeave(player)
             sendMessage(player.bukkit.displayName + " has left the game!")
             player.data.gameID = null
-            player.data.delete()
+            player.deleteData()
             players.remove(player)
             return true
         }

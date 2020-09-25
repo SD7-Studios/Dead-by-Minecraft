@@ -143,13 +143,13 @@ class DeadByMinecraftPlugin() : JavaPlugin()
                 properties.setBoolean(SlimeProperties.PVP, false)
                 properties.setString(SlimeProperties.WORLD_TYPE, "customized")
 
-                lobbyWorld = slimePlugin.loadWorld(loader, Config.lobbyWorldName(), true, properties)
+                lobbyWorld = slimePlugin.loadWorld(loader, Config.lobbyWorldName(), !DEBUG, properties)
                 slimePlugin.generateWorld(lobbyWorld)
 
                 properties.setString(SlimeProperties.DIFFICULTY, "hard")
                 properties.setBoolean(SlimeProperties.PVP, false)
 
-                gameWorld = slimePlugin.loadWorld(loader, Config.gameWorldName(), true, properties)
+                gameWorld = slimePlugin.loadWorld(loader, Config.gameWorldName(), !DEBUG, properties)
                 slimePlugin.generateWorld(gameWorld)
             }
             catch (e: Exception)

@@ -14,34 +14,19 @@ import org.wordandahalf.spigot.deadbyminecraft.persistence.DeadByMinecraftRoleDa
 
 class DeadByMinecraftPlayer private constructor(val bukkit: Player)
 {
-    val data = Data(this)
+    val data = Data()
 
     /**
      * Object for representing persistent data of a player
+     *
      * TODO: Pretty sure #save() must be called in order to save the data in the object to its respective player
      */
-    data class Data(val player: DeadByMinecraftPlayer)
+    class Data
     {
         var gameID : Int? = null
         var role : DeadByMinecraftRole? = null
 
         fun getGame() : DeadByMinecraftGame? { return DeadByMinecraftGameManager.getGameByID(gameID ?: return null) }
-
-        /**
-         * Saves the data stored in the object to the player's NBT data
-         */
-        fun save()
-        {
-            player.bukkit.persistentDataContainer.set(NamespacedKey(DeadByMinecraftPlugin.Instance, "data"), DeadByMinecraftPlayerDataDataType.TYPE, this)
-        }
-
-        /**
-         * Deletes all DeadByMinecraft data stored in the player's NBT
-         */
-        fun delete()
-        {
-            player.bukkit.persistentDataContainer.remove(NamespacedKey(DeadByMinecraftPlugin.Instance, "data"))
-        }
     }
 
     companion object
@@ -62,5 +47,21 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player)
     fun sendMessage(type: ChatMessageType, vararg components: BaseComponent)
     {
         this.bukkit.spigot().sendMessage(type, *components)
+    }
+
+    /**
+     * Saves the data stored in the object to the player's NBT data
+     */
+    fun saveData()
+    {
+        bukkit.persistentDataContainer.set(NamespacedKey(DeadByMinecraftPlugin.Instance, "data"), DeadByMinecraftPlayerDataDataType.TYPE, data)
+    }
+
+    /**
+     * Deletes all DeadByMinecraft data stored in the player's NBT
+     */
+    fun deleteData()
+    {
+        bukkit.persistentDataContainer.remove(NamespacedKey(DeadByMinecraftPlugin.Instance, "data"))
     }
 }

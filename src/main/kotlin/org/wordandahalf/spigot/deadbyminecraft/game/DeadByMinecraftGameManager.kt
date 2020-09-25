@@ -49,7 +49,7 @@ object DeadByMinecraftGameManager
      */
     fun removeGame(id : Int) : Boolean
     {
-        if(id > games.size - 1) return false else games.remove(id); return true
+        if(id > games.size - 1) return false else games[id]?.stop(); games.remove(id); return true
     }
 
     fun getGames() : Array<DeadByMinecraftGame>

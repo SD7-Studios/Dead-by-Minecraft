@@ -1,5 +1,6 @@
 package org.wordandahalf.spigot.deadbyminecraft
 
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -20,6 +21,7 @@ class DeadByMinecraftCommandListener : CommandExecutor
         hashMapOf(
             Pair("list", ListGamesSubcommandExecutor()),
             Pair("create", CreateSubcommandExecutor()),
+            Pair("stop", StopGameSubcommandExecutor()),
             Pair("join", JoinGameSubcommandExecutor()),
             Pair("leave", LeaveGameSubcommandExecutor()),
             Pair("tp", TeleportToLobbySubcommandExecutor()),
@@ -90,6 +92,25 @@ class DeadByMinecraftCommandListener : CommandExecutor
         override fun getNumberOfArguments(): Int { return 1 }
     }
 
+    private class StopGameSubcommandExecutor : GenericSubcommandExecutor
+    {
+        override fun execute(sender: CommandSender, args: Array<out String>): Boolean
+        {
+            return if(DeadByMinecraftGameManager.removeGame(args[1].toInt())) {
+                sender.sendMessage("Stopped game ${args[1]}...")
+                true
+            } else {
+                sender.sendMessage("Failed to game ${args[1]}!")
+                true
+            }
+        }
+
+        override fun getNumberOfArguments(): Int
+        {
+            return 2
+        }
+    }
+
     private class JoinGameSubcommandExecutor : PlayerSubcommandExecutor
     {
         override fun execute(sender: Player, args: Array<out String>): Boolean
@@ -148,7 +169,21 @@ class DeadByMinecraftCommandListener : CommandExecutor
     {
         override fun execute(sender: Player, args: Array<out String>): Boolean
         {
-            return true
+            when(args[1])
+            {
+                "lobby" -> {
+                    sender.teleport(Bukkit.getWorld(DeadByMinecraftPlugin.Config.lobbyWorldName())!!.spawnLocation)
+
+                    return true
+                }
+                "game" -> {
+                    sender.teleport(Bukkit.getWorld(DeadByMinecraftPlugin.Config.gameWorldName())!!.spawnLocation)
+
+                    return true
+                }
+            }
+
+            return false
         }
 
         override fun getNumberOfArguments(): Int { return 2 }
