@@ -2,7 +2,9 @@ package org.wordandahalf.spigot.deadbyminecraft.game.states
 
 import net.citizensnpcs.api.CitizensAPI
 import net.citizensnpcs.api.npc.NPC
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.Location
 import org.bukkit.entity.EntityType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -14,7 +16,7 @@ import org.wordandahalf.spigot.deadbyminecraft.item.menu.HotbarMenu
 
 class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGameState(game)
 {
-    private val playerNpcs : Array<NPC?> = arrayOfNulls(DeadByMinecraftPlugin.Config.getMaxPlayers())
+    private val playerNpcs : Array<NPC?> = arrayOfNulls(DeadByMinecraftPlugin.Config.maxPlayers())
 
     /**
      * Called when the parent DeadByMinecraftGame switches to this state, after #onLeave()
@@ -28,32 +30,44 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
 
     override fun onPlayerJoin(player: DeadByMinecraftPlayer)
     {
-        if(playerNpcs.indexOf(null) != -1)
+        // If there is an available position and NPCs are enabled
+        if(playerNpcs.indexOf(null) != -1 && DeadByMinecraftPlugin.Config.areLobbyNPCsEnabled())
         {
             val nextIndex = playerNpcs.indexOf(null)
-
             val npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, player.bukkit.displayName)
-            npc.spawn(DeadByMinecraftPlugin.Config.getGameWorldLobbyNPCSpawnLocations()[nextIndex])
+
+            val positions = DeadByMinecraftPlugin.Config.lobbyNPCSpawnLocations()[nextIndex]
+
+            npc.spawn(Location(game.bukkitLobbyWorld(), positions[0], positions[1], positions[2]))
             playerNpcs[nextIndex] = npc
         }
 
+        // Display the default hotbar menu
         HotbarMenu.Lobby.DEFAULT_MENU.display(player.bukkit)
+
+        // Teleport the player
+        val positions = DeadByMinecraftPlugin.Config.lobbySpawnLocation()
+        player.bukkit.teleport(Location(game.bukkitLobbyWorld(), positions[0], positions[1], positions[2], positions[3].toFloat(), positions[4].toFloat()))
+
         player.bukkit.gameMode = GameMode.ADVENTURE
         player.bukkit.velocity = Vector().zero()
         player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0, true, false, false))
         player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false, false))
-        player.bukkit.teleport(DeadByMinecraftPlugin.Config.getGameWorldLobbySpawnLocation())
     }
 
     override fun onPlayerLeave(player: DeadByMinecraftPlayer)
     {
+        // Remove the player's NPC
         playerNpcs.filter { it?.name == player.bukkit.displayName }.forEach {
             it?.destroy()
             it?.owningRegistry?.deregister(it)
         }
+
         player.bukkit.removePotionEffect(PotionEffectType.SLOW)
         player.bukkit.removePotionEffect(PotionEffectType.INVISIBILITY)
-        player.bukkit.teleport(DeadByMinecraftPlugin.Config.getDefaultWorld().spawnLocation)
+        player.bukkit.teleport(Bukkit.getWorld(DeadByMinecraftPlugin.Config.defaultWorldName())!!.spawnLocation)
+
+        // Remove any hotbar menu
         HotbarMenu.EMPTY.display(player.bukkit)
     }
 
@@ -67,7 +81,7 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
             it?.owningRegistry?.deregister(it)
         }
 
-        game.getPlayers().forEach {
+        game.players.forEach {
             it.bukkit.removePotionEffect(PotionEffectType.SLOW)
             it.bukkit.removePotionEffect(PotionEffectType.INVISIBILITY)
         }

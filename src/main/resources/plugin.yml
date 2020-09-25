@@ -6,7 +6,7 @@ website: wordandahalf.org
 
 main: org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
 api-version: 1.16
-depend: [ProtocolLib, Citizens]
+depend: [ProtocolLib, Citizens, SlimeWorldManager]
 
 commands:
   dbm:

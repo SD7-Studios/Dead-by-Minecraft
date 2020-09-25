@@ -4,7 +4,6 @@ import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
@@ -62,7 +61,7 @@ class DeadByMinecraftCommandListener : CommandExecutor
             data.author = ""
 
             DeadByMinecraftGameManager.getGames().forEach {
-                data.addPage("Game #${it.id}\nIn ${it.state}\n${it.getNumberOfPlayers()}/${it.maxPlayers}")
+                data.addPage("Game #${it.id}\nIn ${it.state}\n${it.numberOfPlayers()}/${it.maxPlayers}")
             }
 
             book.itemMeta = data
@@ -130,9 +129,9 @@ class DeadByMinecraftCommandListener : CommandExecutor
             if(args.size != 1)
                 return false
 
-            if(sender.getGame() is DeadByMinecraftGame)
+            if(sender.data.getGame() is DeadByMinecraftGame)
             {
-                sender.getGame()?.removePlayer(sender)
+                sender.data.getGame()?.removePlayer(sender)
             }
             else
             {

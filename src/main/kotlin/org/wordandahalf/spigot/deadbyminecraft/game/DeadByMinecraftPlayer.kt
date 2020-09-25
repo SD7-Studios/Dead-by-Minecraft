@@ -1,12 +1,49 @@
 package org.wordandahalf.spigot.deadbyminecraft.game
 
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
+import org.bukkit.persistence.PersistentDataAdapterContext
+import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
+import org.wordandahalf.spigot.deadbyminecraft.game.role.DeadByMinecraftRole
+import org.wordandahalf.spigot.deadbyminecraft.persistence.DeadByMinecraftPlayerDataDataType
+import org.wordandahalf.spigot.deadbyminecraft.persistence.DeadByMinecraftRoleDataType
 
 class DeadByMinecraftPlayer private constructor(val bukkit: Player)
 {
+    val data = Data(this)
+
+    /**
+     * Object for representing persistent data of a player
+     * TODO: Pretty sure #save() must be called in order to save the data in the object to its respective player
+     */
+    data class Data(val player: DeadByMinecraftPlayer)
+    {
+        var gameID : Int? = null
+        var role : DeadByMinecraftRole? = null
+
+        fun getGame() : DeadByMinecraftGame? { return DeadByMinecraftGameManager.getGameByID(gameID ?: return null) }
+
+        /**
+         * Saves the data stored in the object to the player's NBT data
+         */
+        fun save()
+        {
+            player.bukkit.persistentDataContainer.set(NamespacedKey(DeadByMinecraftPlugin.Instance, "data"), DeadByMinecraftPlayerDataDataType.TYPE, this)
+        }
+
+        /**
+         * Deletes all DeadByMinecraft data stored in the player's NBT
+         */
+        fun delete()
+        {
+            player.bukkit.persistentDataContainer.remove(NamespacedKey(DeadByMinecraftPlugin.Instance, "data"))
+        }
+    }
+
     companion object
     {
         private val playerCache : HashMap<Player, DeadByMinecraftPlayer> = hashMapOf()
@@ -22,38 +59,8 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player)
         }
     }
 
-    fun getGame() : DeadByMinecraftGame?
+    fun sendMessage(type: ChatMessageType, vararg components: BaseComponent)
     {
-        val id = get("game_id", PersistentDataType.INTEGER)
-
-        if(id is Int)
-        {
-            if(DeadByMinecraftGameManager.getGameByID(id) is DeadByMinecraftGame)
-                return DeadByMinecraftGameManager.getGameByID(id)
-
-            remove("game_id")
-        }
-
-        return null
-    }
-
-    fun <T, Z> get(key: String, type: PersistentDataType<T, Z>) : Z?
-    {
-        return this.bukkit.persistentDataContainer.get(NamespacedKey(DeadByMinecraftPlugin.Instance, key), type)
-    }
-
-    fun <T, Z> set(key: String, type: PersistentDataType<T, Z>, value: Z)
-    {
-        this.bukkit.persistentDataContainer.set(NamespacedKey(DeadByMinecraftPlugin.Instance, key), type, value)
-    }
-
-    fun remove(key: String)
-    {
-        this.bukkit.persistentDataContainer.remove(NamespacedKey(DeadByMinecraftPlugin.Instance, key))
-    }
-
-    fun <T, Z> has(key: String, type: PersistentDataType<T, Z>) : Boolean
-    {
-        return this.bukkit.persistentDataContainer.has(NamespacedKey(DeadByMinecraftPlugin.Instance, key), type)
+        this.bukkit.spigot().sendMessage(type, *components)
     }
 }

@@ -1,15 +1,16 @@
 max-players: 4
-game-world:
-  name: dead_by_minecraft
-  lobby:
-    spawn-location: [193.5, 6.0, 77.5]
-    spawn-rotation: [-166.0, 3.0]
-    npcs:
-      enabled: true
-      locations:
-        - [197.5, 5.0, 65.5]
-        - [200.5, 5.0, 67.5]
-        - [204.5, 5.0, 66.5]
-        - [206.5, 5.0, 68.5]
+lobby:
+  world-name: dbm-lobby-world
+  spawn-location: [0.0, 6.0, 0.0]
+  spawn-rotation: [-166.0, 3.0]
+  npcs:
+    enabled: true
+    locations:
+      - [4.5, 5.0, -11.5]
+      - [7.5, 5.0, -9.5]
+      - [11.5, 5.0, -10.5]
+      - [13.5, 5.0, -8.5]
+game:
+  world-name: dbm-game-world
 default-world:
-  name: world
+  name: dead-by-minecraft-development

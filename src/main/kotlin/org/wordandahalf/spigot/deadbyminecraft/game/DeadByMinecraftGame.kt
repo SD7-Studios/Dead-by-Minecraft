@@ -1,12 +1,21 @@
 package org.wordandahalf.spigot.deadbyminecraft.game
 
-import org.bukkit.persistence.PersistentDataType
+import com.grinderwolf.swm.api.world.SlimeWorld
+import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.ComponentBuilder
+import org.bukkit.Bukkit
+import org.bukkit.World
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftGameState
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftLobbyState
 
 class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
 {
-    private val players : ArrayList<DeadByMinecraftPlayer> = ArrayList(maxPlayers)
+    val players : ArrayList<DeadByMinecraftPlayer> = ArrayList(maxPlayers)
+
+    private val lobbyWorld : SlimeWorld = DeadByMinecraftPlugin.Worlds.cloneLobbyWorld()
+    private val gameWorld : SlimeWorld = DeadByMinecraftPlugin.Worlds.cloneGameWorld()
 
     var state : DeadByMinecraftGameState = DeadByMinecraftLobbyState(this)
         set(newState)
@@ -21,10 +30,9 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
         removeAllPlayers()
     }
 
-    fun getPlayers() : List<DeadByMinecraftPlayer>
-    {
-        return players
-    }
+    //
+    // Player management functions
+    //
 
     fun addPlayer(player: DeadByMinecraftPlayer) : Boolean
     {
@@ -33,7 +41,8 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
             state.onPlayerJoin(player)
             sendMessage(player.bukkit.displayName + " has joined the game!")
             players.add(player)
-            player.set("game_id", PersistentDataType.INTEGER, id)
+            player.data.gameID = id
+            player.data.save()
             return true
         }
 
@@ -48,7 +57,8 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
             val player = it.next()
 
             state.onPlayerLeave(player)
-            player.remove("game_id")
+            player.data.gameID = null
+            player.data.delete()
             it.remove()
         }
     }
@@ -58,21 +68,29 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
         if(players.contains(player))
         {
             state.onPlayerLeave(player)
-            player.remove("game_id")
-            players.remove(player)
             sendMessage(player.bukkit.displayName + " has left the game!")
+            player.data.gameID = null
+            player.data.delete()
+            players.remove(player)
             return true
         }
 
         return false
     }
 
-    fun getNumberOfPlayers() : Int { return players.size }
+    fun numberOfPlayers() : Int { return players.size }
+
+    //
+    // World functions
+    //
+
+    fun bukkitLobbyWorld() : World { return Bukkit.getWorld(lobbyWorld.name)!! }
+    fun bukkitGameWorld() : World { return Bukkit.getWorld(gameWorld.name)!! }
 
     fun sendMessage(message: String)
     {
         players.forEach {
-            it.bukkit.sendRawMessage(message)
+            it.sendMessage(ChatMessageType.ACTION_BAR, *ComponentBuilder(message).color(ChatColor.YELLOW).create())
         }
     }
 }

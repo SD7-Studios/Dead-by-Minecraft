@@ -38,7 +38,7 @@ object DeadByMinecraftGameManager
     {
         val id : Int = getNextGameID()
 
-        games[id] = DeadByMinecraftGame(id, DeadByMinecraftPlugin.Config.getMaxPlayers())
+        games[id] = DeadByMinecraftGame(id, DeadByMinecraftPlugin.Config.maxPlayers())
 
         return id
     }

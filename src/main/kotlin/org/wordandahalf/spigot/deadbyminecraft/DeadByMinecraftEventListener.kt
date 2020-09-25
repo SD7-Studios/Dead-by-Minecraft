@@ -27,11 +27,9 @@ class DeadByMinecraftEventListener : Listener
     {
         val player = DeadByMinecraftPlayer.of(e.player)
 
-        // TODO: Better system
-        if(player.has("game_id", PersistentDataType.INTEGER))
+        if(player.data.gameID is Int)
         {
-            val game = player.getGame()
-
+            val game = player.data.getGame()
             if(game is DeadByMinecraftGame)
             {
                 game.addPlayer(player)
@@ -39,8 +37,7 @@ class DeadByMinecraftEventListener : Listener
             else
             {
                 player.bukkit.sendMessage("The game you were previously in has ended!")
-                // TODO: Remove all DBM tags
-                player.remove("game_id")
+                player.data.gameID = null
             }
         }
     }
@@ -51,7 +48,7 @@ class DeadByMinecraftEventListener : Listener
      */
     fun onPlayerMove(e: PlayerMoveEvent)
     {
-        val game = DeadByMinecraftPlayer.of(e.player).getGame()
+        val game = DeadByMinecraftPlayer.of(e.player).data.getGame()
         if(game is DeadByMinecraftGame)
         {
             if(game.state is DeadByMinecraftLobbyState)
@@ -71,7 +68,7 @@ class DeadByMinecraftEventListener : Listener
         if(e.whoClicked !is Player)
             return
 
-        if(DeadByMinecraftPlayer.of(e.whoClicked as Player).getGame() is DeadByMinecraftGame)
+        if(DeadByMinecraftPlayer.of(e.whoClicked as Player).data.getGame() is DeadByMinecraftGame)
         {
             e.isCancelled = true
         }
@@ -83,7 +80,7 @@ class DeadByMinecraftEventListener : Listener
      */
     fun onPlayerDropItem(e: PlayerDropItemEvent)
     {
-        if(DeadByMinecraftPlayer.of(e.player).getGame() is DeadByMinecraftGame)
+        if(DeadByMinecraftPlayer.of(e.player).data.getGame() is DeadByMinecraftGame)
         {
             e.isCancelled = true
         }
@@ -97,7 +94,7 @@ class DeadByMinecraftEventListener : Listener
             ScriptableItemStack.getExecutor(e.item as ItemStack)?.accept(e, e.item as ItemStack)
         }
 
-        if(DeadByMinecraftPlayer.of(e.player).getGame() is DeadByMinecraftGame)
+        if(DeadByMinecraftPlayer.of(e.player).data.getGame() is DeadByMinecraftGame)
         {
             e.isCancelled = true
             return

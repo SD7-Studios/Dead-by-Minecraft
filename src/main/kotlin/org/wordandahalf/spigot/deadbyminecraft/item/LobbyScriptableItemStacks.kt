@@ -1,8 +1,12 @@
 package org.wordandahalf.spigot.deadbyminecraft.item
 
+import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
+import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.item.menu.HotbarMenu
 
 /**
