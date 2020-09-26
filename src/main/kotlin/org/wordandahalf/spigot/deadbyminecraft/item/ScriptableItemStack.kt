@@ -5,7 +5,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import java.util.function.BiConsumer
 
 /**
@@ -20,7 +20,7 @@ abstract class ScriptableItemStack(private val executor: Executor)
 
         fun isScriptableItemStack(itemStack: ItemStack) : Boolean
         {
-            return itemStack.itemMeta!!.persistentDataContainer.has(NamespacedKey(DeadByMinecraftPlugin.Instance, "executor"), PersistentDataType.STRING)
+            return itemStack.itemMeta!!.persistentDataContainer.has(NamespacedKey(DeadByMinecraft.instance, "executor"), PersistentDataType.STRING)
         }
 
         fun getExecutor(itemStack: ItemStack) : Executor?
@@ -28,7 +28,7 @@ abstract class ScriptableItemStack(private val executor: Executor)
             return registeredExecutors[
                 // An item's meta should never be null!
                 itemStack.itemMeta!!.persistentDataContainer[
-                    NamespacedKey(DeadByMinecraftPlugin.Instance, "executor"), PersistentDataType.STRING
+                    NamespacedKey(DeadByMinecraft.instance, "executor"), PersistentDataType.STRING
                 ]
             ]
         }
@@ -58,8 +58,13 @@ abstract class ScriptableItemStack(private val executor: Executor)
         // stack.itemMeta should never be null, otherwise hell must've frozen over
         val meta = stack.itemMeta!!
 
-        meta.persistentDataContainer.set(NamespacedKey(DeadByMinecraftPlugin.Instance, "executor"), PersistentDataType.STRING, this.getID())
+        // Store the executor's name in the item's meta for retrieval upon use.
+        meta.persistentDataContainer.set(NamespacedKey(DeadByMinecraft.instance, "executor"), PersistentDataType.STRING, this.getID())
+
+        // Set the display name, if any
         meta.setDisplayName(getDisplayName())
+
+        // Item should not be breakable
         meta.isUnbreakable = true
 
         stack.itemMeta = meta

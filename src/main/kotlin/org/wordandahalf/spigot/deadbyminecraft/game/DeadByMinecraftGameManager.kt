@@ -1,10 +1,11 @@
 package org.wordandahalf.spigot.deadbyminecraft.game
 
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
 import java.util.*
 
-// Kotlin does not offer a static modifier; thus an object expression is required
+/**
+ * Keeps track of running DeadByMinecraft games.
+ */
 object DeadByMinecraftGameManager
 {
     private val games : TreeMap<Int, DeadByMinecraftGame> = TreeMap()

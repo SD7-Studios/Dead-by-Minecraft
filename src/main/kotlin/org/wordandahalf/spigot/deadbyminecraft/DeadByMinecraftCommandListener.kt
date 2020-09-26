@@ -14,6 +14,9 @@ import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.item.ScriptableItemStack
 import java.lang.NumberFormatException
 
+/**
+ * Debug commands. Not for real, end-user use.
+ */
 class DeadByMinecraftCommandListener : CommandExecutor
 {
     private val registeredSubcommands:
@@ -172,12 +175,12 @@ class DeadByMinecraftCommandListener : CommandExecutor
             when(args[1])
             {
                 "lobby" -> {
-                    sender.teleport(Bukkit.getWorld(DeadByMinecraftPlugin.Config.lobbyWorldName())!!.spawnLocation)
+                    sender.teleport(Bukkit.getWorld(DeadByMinecraftConfig.lobbyWorldName())!!.spawnLocation)
 
                     return true
                 }
                 "game" -> {
-                    sender.teleport(Bukkit.getWorld(DeadByMinecraftPlugin.Config.gameWorldName())!!.spawnLocation)
+                    sender.teleport(Bukkit.getWorld(DeadByMinecraftConfig.gameWorldName())!!.spawnLocation)
 
                     return true
                 }

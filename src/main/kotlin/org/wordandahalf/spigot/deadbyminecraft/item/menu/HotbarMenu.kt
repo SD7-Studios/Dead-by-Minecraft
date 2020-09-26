@@ -4,7 +4,10 @@ import org.bukkit.entity.Player
 import org.wordandahalf.spigot.deadbyminecraft.item.*
 import java.security.InvalidParameterException
 
-class HotbarMenu(vararg val items: ScriptableItemStack?)
+/**
+ * QoL class for easily switching between a set of ScriptableItemStacks
+ */
+class HotbarMenu(private vararg val items: ScriptableItemStack?)
 {
     companion object { val EMPTY = HotbarMenu() }
 
@@ -34,22 +37,5 @@ class HotbarMenu(vararg val items: ScriptableItemStack?)
                 player.inventory.setItem(i, null)
             }
         }
-    }
-
-    override fun equals(other: Any?): Boolean
-    {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as HotbarMenu
-
-        if (!items.contentEquals(other.items)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int
-    {
-        return items.contentHashCode()
     }
 }

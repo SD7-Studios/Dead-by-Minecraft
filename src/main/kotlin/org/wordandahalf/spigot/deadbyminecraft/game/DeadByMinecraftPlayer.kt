@@ -4,14 +4,13 @@ import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
-import org.bukkit.persistence.PersistentDataAdapterContext
-import org.bukkit.persistence.PersistentDataContainer
-import org.bukkit.persistence.PersistentDataType
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.game.role.DeadByMinecraftRole
 import org.wordandahalf.spigot.deadbyminecraft.persistence.DeadByMinecraftPlayerDataDataType
-import org.wordandahalf.spigot.deadbyminecraft.persistence.DeadByMinecraftRoleDataType
 
+/**
+ * Wrapper for the Bukkit Player class, providing methods for saving and deleting DBM-related data.
+ */
 class DeadByMinecraftPlayer private constructor(val bukkit: Player)
 {
     val data = Data()
@@ -33,6 +32,9 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player)
     {
         private val playerCache : HashMap<Player, DeadByMinecraftPlayer> = hashMapOf()
 
+        /**
+         * Returns the Bukkit Player's respective cached DeadByMinecraftPlayer, creating a new one if it does not already exist.
+         */
         fun of(player: Player) : DeadByMinecraftPlayer
         {
             if(playerCache[player] !is DeadByMinecraftPlayer)
@@ -54,7 +56,7 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player)
      */
     fun saveData()
     {
-        bukkit.persistentDataContainer.set(NamespacedKey(DeadByMinecraftPlugin.Instance, "data"), DeadByMinecraftPlayerDataDataType.TYPE, data)
+        bukkit.persistentDataContainer.set(NamespacedKey(DeadByMinecraft.instance, "data"), DeadByMinecraftPlayerDataDataType.TYPE, data)
     }
 
     /**
@@ -62,6 +64,6 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player)
      */
     fun deleteData()
     {
-        bukkit.persistentDataContainer.remove(NamespacedKey(DeadByMinecraftPlugin.Instance, "data"))
+        bukkit.persistentDataContainer.remove(NamespacedKey(DeadByMinecraft.instance, "data"))
     }
 }

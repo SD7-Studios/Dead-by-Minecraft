@@ -20,7 +20,7 @@ object DeadByMinecraftConfig
 
     fun get(key: String) : Any?
     {
-        return DeadByMinecraftPlugin.Instance.config.get(key)
+        return DeadByMinecraft.instance.config.get(key)
     }
 
     fun defaultWorldName() : String

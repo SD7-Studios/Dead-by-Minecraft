@@ -6,16 +6,19 @@ import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.World
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftGameState
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftLobbyState
 
+/**
+ * Represents a game of Dead by Minecraft and all associated data.
+ */
 class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
 {
     val players : ArrayList<DeadByMinecraftPlayer> = ArrayList(maxPlayers)
 
-    private val lobbyWorld : SlimeWorld = DeadByMinecraftPlugin.Worlds.cloneLobbyWorld()
-    private val gameWorld : SlimeWorld = DeadByMinecraftPlugin.Worlds.cloneGameWorld()
+    private val lobbyWorld : SlimeWorld = DeadByMinecraft.Worlds.cloneLobbyWorld()
+    private val gameWorld : SlimeWorld = DeadByMinecraft.Worlds.cloneGameWorld()
 
     var state : DeadByMinecraftGameState = DeadByMinecraftLobbyState(this)
         set(newState)

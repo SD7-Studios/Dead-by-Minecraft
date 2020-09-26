@@ -10,11 +10,13 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.item.menu.HotbarMenu
 
+/**
+ * Handles all logic for a DeadByMinecraftGame when it is in the lobby
+ */
 class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGameState(game)
 {
     private val playerNpcs : Array<NPC?> = arrayOfNulls(DeadByMinecraftConfig.maxPlayers())
