@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.entity.Player
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.DeadByMinecraftPlayerRole
 
 /**
  * Wrapper for the Bukkit Player class, providing methods for saving and deleting DBM-related data.

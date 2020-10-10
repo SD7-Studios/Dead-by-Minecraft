@@ -7,7 +7,11 @@ import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftSurvivorRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.DeadByMinecraftSurvivorRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftKillerRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftNurseRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftTrapperRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftWraithRole
 import org.wordandahalf.spigot.deadbyminecraft.item.menu.HotbarMenu
 
 //
@@ -50,50 +54,54 @@ class SelectKillerItem : ScriptableItemStack(Executor())
     {
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
-            HotbarMenu.Lobby.KILLER_MENU.display(t.player)
+            HotbarMenu.Lobby.KILLER_SELECTION_MENU.display(t.player)
         }
     }
 
     override fun getMaterial() : Material { return Material.GUNPOWDER }
 }
 
-class SelectTrapperItem : ScriptableItemStack(Executor())
+abstract class SelectKillerRoleItem(killerRole: Class<out DeadByMinecraftKillerRole>) : ScriptableItemStack(Executor(killerRole))
 {
-    class Executor : ScriptableItemStack.Executor()
+    class Executor(private val killerRole: Class<out DeadByMinecraftKillerRole>) : ScriptableItemStack.Executor()
     {
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
-            t.player.sendMessage("Selected trapper!")
+            // Give the player the killer role
+            val player = DeadByMinecraftPlayer.of(t.player)
+            player.data.role = killerRole.getConstructor().newInstance()
+            // Display the survivor menu
+            HotbarMenu.Lobby.KILLER_MENU.display(t.player)
+
+            // Display a message
+            player.sendMessage(ChatMessageType.ACTION_BAR,
+                    *ComponentBuilder()
+                            .color(ChatColor.GOLD)
+                            .append("You choose to be the ")
+                            .bold(true)
+                            .color(ChatColor.DARK_RED)
+                            .append(player.data.role.toString())
+                            .bold(false)
+                            .color(ChatColor.GOLD).append("!")
+                            .create()
+            )
         }
     }
+}
 
+class SelectTrapperItem : SelectKillerRoleItem(DeadByMinecraftTrapperRole::class.java)
+{
     override fun getMaterial() : Material { return Material.MAGMA_CREAM }
 }
 
-class SelectWraithItem : ScriptableItemStack(Executor())
+class SelectWraithItem : SelectKillerRoleItem(DeadByMinecraftWraithRole::class.java)
 {
-    class Executor : ScriptableItemStack.Executor()
-    {
-        override fun accept(t: PlayerInteractEvent, u: ItemStack)
-        {
-            t.player.sendMessage("Selected wraith!")
-        }
-    }
-
     override fun getMaterial() : Material { return Material.GHAST_TEAR }
 }
 
-class SelectNurseItem : ScriptableItemStack(Executor())
+class SelectNurseItem : SelectKillerRoleItem(DeadByMinecraftNurseRole::class.java)
 {
-    class Executor : ScriptableItemStack.Executor()
-    {
-        override fun accept(t: PlayerInteractEvent, u: ItemStack)
-        {
-            t.player.sendMessage("Selected nurse!")
-        }
-    }
-
-    override fun getMaterial() : Material { return Material.BLAZE_POWDER }
+    override fun getMaterial() : Material { return Material.GHAST_TEAR }
 }
 
 class GoBackItem(executor: (t: PlayerInteractEvent, u: ItemStack) -> Unit) : ScriptableItemStack(Executor(executor))

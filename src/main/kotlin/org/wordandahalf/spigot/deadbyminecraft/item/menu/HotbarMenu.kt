@@ -14,9 +14,10 @@ class HotbarMenu(private vararg val items: ScriptableItemStack?)
 
     object Lobby
     {
-        val DEFAULT_MENU = HotbarMenu(SelectSurvivorItem(), SelectKillerItem())
-        val SURVIVOR_MENU = HotbarMenu(null, null, null, null, null, null, null, null, GoBackItem { t, _ -> DeadByMinecraftPlayer.of(t.player).data.role = null; DEFAULT_MENU.display(t.player) })
-        val KILLER_MENU = HotbarMenu(SelectTrapperItem(), SelectWraithItem(), SelectNurseItem(), null, null, null, null, null, GoBackItem { t, _ -> DEFAULT_MENU.display(t.player) })
+        val DEFAULT_MENU            = HotbarMenu(SelectSurvivorItem(), SelectKillerItem())
+        val SURVIVOR_MENU           = HotbarMenu(null, null, null, null, null, null, null, null, GoBackItem { t, _ -> DeadByMinecraftPlayer.of(t.player).data.role = null; DEFAULT_MENU.display(t.player) })
+        val KILLER_SELECTION_MENU   = HotbarMenu(SelectTrapperItem(), SelectWraithItem(), SelectNurseItem(), null, null, null, null, null, GoBackItem { t, _ -> DEFAULT_MENU.display(t.player) })
+        val KILLER_MENU             = HotbarMenu(null, null, null, null, null, null, null, null, GoBackItem { t, _ -> DeadByMinecraftPlayer.of(t.player).data.role = null; KILLER_SELECTION_MENU.display(t.player) })
     }
 
     init
