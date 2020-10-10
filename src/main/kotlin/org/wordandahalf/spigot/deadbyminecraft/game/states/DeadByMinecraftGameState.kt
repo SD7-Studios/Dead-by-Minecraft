@@ -1,7 +1,7 @@
 package org.wordandahalf.spigot.deadbyminecraft.game.states
 
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 
 abstract class DeadByMinecraftGameState(val game: DeadByMinecraftGame)
 {

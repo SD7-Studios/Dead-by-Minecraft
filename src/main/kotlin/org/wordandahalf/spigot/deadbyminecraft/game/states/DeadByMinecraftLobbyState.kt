@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.item.menu.HotbarMenu
 
 /**

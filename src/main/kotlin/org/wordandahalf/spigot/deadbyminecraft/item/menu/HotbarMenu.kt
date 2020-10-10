@@ -1,6 +1,7 @@
 package org.wordandahalf.spigot.deadbyminecraft.item.menu
 
 import org.bukkit.entity.Player
+import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.item.*
 import java.security.InvalidParameterException
 
@@ -14,8 +15,8 @@ class HotbarMenu(private vararg val items: ScriptableItemStack?)
     object Lobby
     {
         val DEFAULT_MENU = HotbarMenu(SelectSurvivorItem(), SelectKillerItem())
-        val SURVIVOR_MENU = HotbarMenu(null, null, null, null, null, null, null, null, GoBackItem(DEFAULT_MENU))
-        val KILLER_MENU = HotbarMenu(SelectTrapperItem(), SelectWraithItem(), SelectNurseItem(), null, null, null, null, null, GoBackItem(DEFAULT_MENU))
+        val SURVIVOR_MENU = HotbarMenu(null, null, null, null, null, null, null, null, GoBackItem { t, _ -> DeadByMinecraftPlayer.of(t.player).data.role = null; DEFAULT_MENU.display(t.player) })
+        val KILLER_MENU = HotbarMenu(SelectTrapperItem(), SelectWraithItem(), SelectNurseItem(), null, null, null, null, null, GoBackItem { t, _ -> DEFAULT_MENU.display(t.player) })
     }
 
     init

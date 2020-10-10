@@ -7,6 +7,8 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftWorlds
+import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftGameState
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftLobbyState
 
@@ -17,8 +19,8 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
 {
     val players : ArrayList<DeadByMinecraftPlayer> = ArrayList(maxPlayers)
 
-    private val lobbyWorld : SlimeWorld = DeadByMinecraft.Worlds.cloneLobbyWorld()
-    private val gameWorld : SlimeWorld = DeadByMinecraft.Worlds.cloneGameWorld()
+    private val lobbyWorld : SlimeWorld = DeadByMinecraftWorlds.cloneLobby()
+    private val gameWorld : SlimeWorld = DeadByMinecraftWorlds.cloneGame()
 
     var state : DeadByMinecraftGameState = DeadByMinecraftLobbyState(this)
         set(newState)
@@ -45,7 +47,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
             sendMessage(player.bukkit.displayName + " has joined the game!")
             players.add(player)
             player.data.gameID = id
-            player.saveData()
+            // player.saveData()
             return true
         }
 
@@ -61,7 +63,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
 
             state.onPlayerLeave(player)
             player.data.gameID = null
-            player.deleteData()
+            // player.deleteData()
             it.remove()
         }
     }
@@ -73,7 +75,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
             state.onPlayerLeave(player)
             sendMessage(player.bukkit.displayName + " has left the game!")
             player.data.gameID = null
-            player.deleteData()
+            // player.deleteData()
             players.remove(player)
             return true
         }

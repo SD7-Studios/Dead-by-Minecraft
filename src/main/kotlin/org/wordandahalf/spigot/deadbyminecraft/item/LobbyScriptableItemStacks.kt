@@ -1,8 +1,13 @@
 package org.wordandahalf.spigot.deadbyminecraft.item
 
+import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
+import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftSurvivorRole
 import org.wordandahalf.spigot.deadbyminecraft.item.menu.HotbarMenu
 
 //
@@ -15,7 +20,24 @@ class SelectSurvivorItem : ScriptableItemStack(Executor())
     {
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
+            // Give the player the survivor role
+            val player = DeadByMinecraftPlayer.of(t.player)
+            player.data.role = DeadByMinecraftSurvivorRole()
+            // Display the survivor menu
             HotbarMenu.Lobby.SURVIVOR_MENU.display(t.player)
+
+            // Display a message
+            player.sendMessage(ChatMessageType.ACTION_BAR,
+                *ComponentBuilder()
+                .color(ChatColor.GOLD)
+                .append("You choose to be a ")
+                .bold(true)
+                .color(ChatColor.GREEN)
+                .append(player.data.role.toString())
+                .bold(false)
+                .color(ChatColor.GOLD).append("!")
+                .create()
+            )
         }
     }
 
@@ -74,13 +96,13 @@ class SelectNurseItem : ScriptableItemStack(Executor())
     override fun getMaterial() : Material { return Material.BLAZE_POWDER }
 }
 
-class GoBackItem(menu: HotbarMenu) : ScriptableItemStack(Executor(menu))
+class GoBackItem(executor: (t: PlayerInteractEvent, u: ItemStack) -> Unit) : ScriptableItemStack(Executor(executor))
 {
-    class Executor(val menu: HotbarMenu) : ScriptableItemStack.Executor()
+    class Executor(private val executor: (t: PlayerInteractEvent, u: ItemStack) -> Unit) : ScriptableItemStack.Executor()
     {
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
-            menu.display(t.player)
+            executor(t, u)
         }
     }
 

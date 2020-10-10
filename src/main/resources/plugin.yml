@@ -4,8 +4,8 @@ description: Dead by Daylight, but in Minecraft!
 author: Ryan Jones
 website: wordandahalf.org
 
-main: org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftPlugin
-api-version: 1.16.2
+main: org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
+api-version: 1.16
 depend: [ProtocolLib, Citizens, SlimeWorldManager]
 
 commands:
