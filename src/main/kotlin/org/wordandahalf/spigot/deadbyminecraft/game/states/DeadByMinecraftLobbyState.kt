@@ -12,7 +12,7 @@ import org.bukkit.util.Vector
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.item.menu.HotbarMenu
+import org.wordandahalf.spigot.deadbyminecraft.items.menu.HotbarMenu
 
 /**
  * Handles all logic for a DeadByMinecraftGame when it is in the lobby

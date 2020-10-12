@@ -14,7 +14,7 @@ import org.bukkit.util.Vector
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftLobbyState
-import org.wordandahalf.spigot.deadbyminecraft.item.ScriptableItemStack
+import org.wordandahalf.spigot.deadbyminecraft.items.ScriptableItemStack
 
 class DeadByMinecraftEventListener : Listener
 {

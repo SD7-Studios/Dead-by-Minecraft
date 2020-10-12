@@ -9,6 +9,7 @@ import org.bukkit.World
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftWorlds
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftKillerRole
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftGameState
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftLobbyState
 
@@ -81,6 +82,11 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
         }
 
         return false
+    }
+
+    fun hasKiller() : Boolean
+    {
+        return players.filter { it.data.role is DeadByMinecraftKillerRole }.isNotEmpty()
     }
 
     fun numberOfPlayers() : Int { return players.size }

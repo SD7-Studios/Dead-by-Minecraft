@@ -1,5 +1,6 @@
 package org.wordandahalf.spigot.deadbyminecraft
 
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.wordandahalf.spigot.deadbyminecraft.events.DeadByMinecraftCommandListener
 import org.wordandahalf.spigot.deadbyminecraft.events.DeadByMinecraftEventListener
@@ -11,7 +12,7 @@ class DeadByMinecraft : JavaPlugin()
     // Static variables
     companion object
     {
-        lateinit var instance : DeadByMinecraft
+        lateinit var Instance : DeadByMinecraft
         lateinit var Logger : Logger
 
         const val DEBUG : Boolean = true
@@ -19,10 +20,10 @@ class DeadByMinecraft : JavaPlugin()
 
     override fun onEnable()
     {
-        instance = this
+        Instance = this
         Logger = this.logger
 
-        instance.logger.info("Dead by Minecraft has loaded!")
+        Instance.logger.info("Dead by Minecraft has loaded!")
 
         // Saves the provided configuration file if none exists
         saveDefaultConfig()
@@ -45,5 +46,8 @@ class DeadByMinecraft : JavaPlugin()
     {
         // Stop all games
         DeadByMinecraftGameManager.getGames().forEach { it.stop() }
+
+        // Stop all tasks
+        Bukkit.getScheduler().cancelTasks(this)
     }
 }

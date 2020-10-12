@@ -67,6 +67,6 @@ object DeadByMinecraftGameManager
 
     fun getGameByPlayer(player : DeadByMinecraftPlayer) : DeadByMinecraftGame?
     {
-        TODO()
+        return games.values.firstOrNull { it.players.contains(player) }
     }
 }

@@ -1,19 +1,25 @@
 package org.wordandahalf.spigot.deadbyminecraft.events
 
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.item.ScriptableItemStack
+import org.wordandahalf.spigot.deadbyminecraft.items.ScriptableItemStack
+import java.lang.Exception
 import java.lang.NumberFormatException
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * Debug commands. Not for real, end-user use.
@@ -30,7 +36,8 @@ class DeadByMinecraftCommandListener : CommandExecutor
             Pair("leave", LeaveGameSubcommandExecutor()),
             Pair("tp", TeleportToLobbySubcommandExecutor()),
             Pair("skin", SetSkinSubcommandExecutor()),
-            Pair("give", GiveItemSubcommandExecutor())
+            Pair("give", GiveItemSubcommandExecutor()),
+            Pair("toast", ShowToastSubcommandExecutor())
         )
 
     private interface SubcommandExecutor<Sender>
@@ -216,6 +223,68 @@ class DeadByMinecraftCommandListener : CommandExecutor
         }
 
         override fun getNumberOfArguments(): Int { return 2 }
+    }
+
+    private class ShowToastSubcommandExecutor : PlayerSubcommandExecutor
+    {
+        override fun execute(sender: Player, args: Array<out String>): Boolean
+        {
+            // Arguments: icon, frame, header, body
+            try {
+                val key = NamespacedKey(DeadByMinecraft.Instance, "DeadByMinecraft${ThreadLocalRandom.current().nextInt()}")
+
+                val json = JsonObject()
+
+                // JSON conversion
+
+                val display = JsonObject()
+
+                val icon = JsonObject()
+                icon.addProperty("item", args[1])
+                display.add("icon", icon)
+
+                display.add("title", JsonParser().parse(("{\"text\":\"${args[3]}\"}")))
+                val description = JsonObject()
+                description.addProperty("text", "")
+                display.add("description", description)
+                display.addProperty("frame", args[2])
+                display.addProperty("announce_to_chat", false)
+                display.addProperty("show_toast", true)
+                display.addProperty("hidden", true)
+
+                val criteria = JsonObject()
+                val trigger = JsonObject()
+                trigger.addProperty("trigger", "minecraft:impossible")
+                criteria.add("impossible", trigger)
+                json.add("criteria", criteria)
+                json.add("display", display)
+
+                // end JSON stuff
+
+                DeadByMinecraft.Logger.info("Advancement: $json")
+                Bukkit.getUnsafe().loadAdvancement(key, json.toString())
+
+                val advancement = Bukkit.getAdvancement(key) ?: return true
+                val progress = sender.getAdvancementProgress(advancement)
+
+                if (!progress.isDone)
+                    progress.remainingCriteria.forEach { progress.awardCriteria(it) }
+
+                Thread.sleep(20L)
+
+                progress.awardedCriteria.forEach { progress.revokeCriteria(it) }
+
+                Bukkit.getUnsafe().removeAdvancement(key)
+            } catch (e: Exception) {
+                DeadByMinecraft.Logger.info(e.toString())
+            }
+            return true
+        }
+
+        override fun getNumberOfArguments(): Int
+        {
+            return 5
+        }
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean
