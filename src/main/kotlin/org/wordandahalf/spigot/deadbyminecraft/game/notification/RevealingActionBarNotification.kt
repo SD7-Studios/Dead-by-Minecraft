@@ -56,9 +56,9 @@ class RevealingActionBarNotification(text: TextComponent, private val time: Long
             for(v in notif.message)
             {
                 if(!v.second)
-                    message.append(Component.text("&", v.third.decorate(TextDecoration.OBFUSCATED)))
+                    message.append(Component.text('|', v.third.decorate(TextDecoration.OBFUSCATED)))
                 else
-                    message.append(Component.text(v.first, v.third))
+                    message.append(Component.text(if(v.first.isLetterOrDigit()) v.first + 65248 else v.first, v.third))
             }
 
             // Send it

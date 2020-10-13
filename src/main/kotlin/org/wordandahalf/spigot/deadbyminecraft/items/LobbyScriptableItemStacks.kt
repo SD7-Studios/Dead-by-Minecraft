@@ -43,18 +43,15 @@ class SelectSurvivorItem : ScriptableItemStack(Executor())
                 TextComponent.ofChildren(
                     Component.text(
                 "You chose to be a ",
-                        Style.style(TextDecoration.ITALIC)
-                            .color(TextColor.color(0xFFFBCD))
+                        TextColor.color(0xFFFBCD), TextDecoration.ITALIC
                     ),
                     Component.text(
                         player.data.role.toString(),
-                        Style.style(TextDecoration.ITALIC, TextDecoration.BOLD)
-                            .color(TextColor.color(0x33FF33))
+                        TextColor.color(0x33FF33), TextDecoration.ITALIC, TextDecoration.BOLD
                     ),
                     Component.text(
                         "!",
-                        Style.style(TextDecoration.ITALIC)
-                            .color(TextColor.color(0xFFFBCD))
+                        TextColor.color(0xFFFBCD), TextDecoration.ITALIC
                     )
                 ),
             750
@@ -103,13 +100,22 @@ abstract class SelectKillerRoleItem(killerRole: Class<out DeadByMinecraftKillerR
             HotbarMenu.Lobby.KILLER_MENU.display(t.player)
 
             // Display a message
-            DeadByMinecraft.Audience.player(t.player)
-            .sendActionBar(
-                Component
-                    .text("You chose to be the ", TextColor.fromHexString("#FFFBCD"))
-                    .append(Component.text(player.data.role.toString(), TextColor.fromHexString("#990000"))
-                    .append(Component.text("!", TextColor.fromHexString("#FFFBCD"))))
-            )
+            RevealingActionBarNotification(
+                TextComponent.ofChildren(
+                    Component.text(
+                        "You chose to be the ", TextColor.color(0xFFFBCD), TextDecoration.ITALIC
+                    ),
+                    Component.text(
+                        player.data.role.toString(),
+                        TextColor.color(0x990000), TextDecoration.ITALIC, TextDecoration.BOLD
+                    ),
+                    Component.text(
+                        "!",
+                        TextColor.color(0xFFFBCD), TextDecoration.ITALIC
+                    )
+                ),
+                1500
+            ).send(t.player)
         }
     }
 }
