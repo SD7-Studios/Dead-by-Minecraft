@@ -1,6 +1,8 @@
 package org.wordandahalf.spigot.deadbyminecraft.game
 
 import com.grinderwolf.swm.api.world.SlimeWorld
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -45,7 +47,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
         if(!players.contains(player))
         {
             state.onPlayerJoin(player)
-            sendMessage(player.bukkit.displayName + " has joined the game!")
+            sendMessage(Component.text().content(player.bukkit.displayName + " has joined the game!").color(TextColor.fromHexString("E8E8E8")).build())
             players.add(player)
             player.data.gameID = id
             // player.saveData()
@@ -74,7 +76,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
         if(players.contains(player))
         {
             state.onPlayerLeave(player)
-            sendMessage(player.bukkit.displayName + " has left the game!")
+            sendMessage(Component.text().content(player.bukkit.displayName + " has left the game!").color(TextColor.fromHexString("E8E8E8")).build())
             player.data.gameID = null
             // player.deleteData()
             players.remove(player)
@@ -98,10 +100,10 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
     fun bukkitLobbyWorld() : World { return Bukkit.getWorld(lobbyWorld.name)!! }
     fun bukkitGameWorld() : World { return Bukkit.getWorld(gameWorld.name)!! }
 
-    fun sendMessage(message: String)
+    fun sendMessage(message: Component)
     {
         players.forEach {
-            it.sendMessage(ChatMessageType.ACTION_BAR, *ComponentBuilder(message).color(ChatColor.YELLOW).create())
+            DeadByMinecraft.Audience.player(it.bukkit).sendMessage(message)
         }
     }
 }

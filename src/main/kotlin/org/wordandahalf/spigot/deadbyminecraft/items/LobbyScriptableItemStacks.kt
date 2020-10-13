@@ -1,12 +1,19 @@
 package org.wordandahalf.spigot.deadbyminecraft.items
 
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.format.Style
+import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.format.TextDecoration
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
+import org.wordandahalf.spigot.deadbyminecraft.game.notification.RevealingActionBarNotification
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.DeadByMinecraftSurvivorRole
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftKillerRole
@@ -32,17 +39,26 @@ class SelectSurvivorItem : ScriptableItemStack(Executor())
             HotbarMenu.Lobby.SURVIVOR_MENU.display(t.player)
 
             // Display a message
-            player.sendMessage(ChatMessageType.ACTION_BAR,
-                *ComponentBuilder()
-                .color(ChatColor.GOLD)
-                .append("You choose to be a ")
-                .bold(true)
-                .color(ChatColor.GREEN)
-                .append(player.data.role.toString())
-                .bold(false)
-                .color(ChatColor.GOLD).append("!")
-                .create()
-            )
+            RevealingActionBarNotification(
+                TextComponent.ofChildren(
+                    Component.text(
+                "You chose to be a ",
+                        Style.style(TextDecoration.ITALIC)
+                            .color(TextColor.color(0xFFFBCD))
+                    ),
+                    Component.text(
+                        player.data.role.toString(),
+                        Style.style(TextDecoration.ITALIC, TextDecoration.BOLD)
+                            .color(TextColor.color(0x33FF33))
+                    ),
+                    Component.text(
+                        "!",
+                        Style.style(TextDecoration.ITALIC)
+                            .color(TextColor.color(0xFFFBCD))
+                    )
+                ),
+            750
+            ).send(t.player)
         }
     }
 
@@ -64,11 +80,8 @@ class SelectKillerItem : ScriptableItemStack(Executor())
             else
             {
                 // Display a message
-                player.sendMessage(ChatMessageType.ACTION_BAR,
-                        *ComponentBuilder()
-                                .color(ChatColor.RED)
-                                .append("Someone already chose to be the killer!")
-                                .create()
+                DeadByMinecraft.Audience.player(t.player).sendActionBar(
+                    Component.text("The killer limit has been reached.", TextColor.fromHexString("#FFFBCD"))
                 )
             }
         }
@@ -90,16 +103,12 @@ abstract class SelectKillerRoleItem(killerRole: Class<out DeadByMinecraftKillerR
             HotbarMenu.Lobby.KILLER_MENU.display(t.player)
 
             // Display a message
-            player.sendMessage(ChatMessageType.ACTION_BAR,
-                    *ComponentBuilder()
-                            .color(ChatColor.GOLD)
-                            .append("You choose to be the ")
-                            .bold(true)
-                            .color(ChatColor.DARK_RED)
-                            .append(player.data.role.toString())
-                            .bold(false)
-                            .color(ChatColor.GOLD).append("!")
-                            .create()
+            DeadByMinecraft.Audience.player(t.player)
+            .sendActionBar(
+                Component
+                    .text("You chose to be the ", TextColor.fromHexString("#FFFBCD"))
+                    .append(Component.text(player.data.role.toString(), TextColor.fromHexString("#990000"))
+                    .append(Component.text("!", TextColor.fromHexString("#FFFBCD"))))
             )
         }
     }

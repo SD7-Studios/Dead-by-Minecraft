@@ -1,5 +1,6 @@
 package org.wordandahalf.spigot.deadbyminecraft
 
+import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.wordandahalf.spigot.deadbyminecraft.events.DeadByMinecraftCommandListener
@@ -14,6 +15,7 @@ class DeadByMinecraft : JavaPlugin()
     {
         lateinit var Instance : DeadByMinecraft
         lateinit var Logger : Logger
+        lateinit var Audience : BukkitAudiences
 
         const val DEBUG : Boolean = true
     }
@@ -36,6 +38,8 @@ class DeadByMinecraft : JavaPlugin()
 
         // Loads world templates into memory
         DeadByMinecraftWorlds.loadTemplates()
+
+        Audience = BukkitAudiences.create(this)
 
         // If debug mode is enabled, automatically start a game
         if(DEBUG)

@@ -43,8 +43,8 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player)
         }
     }
 
-    fun sendMessage(type: ChatMessageType, vararg components: BaseComponent)
+    fun sendMessage(type: ChatMessageType, component: BaseComponent)
     {
-        this.bukkit.spigot().sendMessage(type, *components)
+        this.bukkit.spigot().sendMessage(type, component)
     }
 }
