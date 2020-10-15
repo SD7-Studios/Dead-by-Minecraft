@@ -6,7 +6,7 @@ import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.entity.Player
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftScheduler
+import org.wordandahalf.spigot.deadbyminecraft.scheduling.DeadByMinecraftScheduler
 import kotlin.math.roundToLong
 import kotlin.random.Random
 

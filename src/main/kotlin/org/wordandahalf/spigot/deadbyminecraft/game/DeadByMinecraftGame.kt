@@ -1,15 +1,12 @@
 package org.wordandahalf.spigot.deadbyminecraft.game
 
 import com.grinderwolf.swm.api.world.SlimeWorld
+import net.kyori.adventure.identity.Identity
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.World
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftWorlds
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftKillerRole
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftGameState
@@ -88,7 +85,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
 
     fun hasKiller() : Boolean
     {
-        return players.filter { it.data.role is DeadByMinecraftKillerRole }.isNotEmpty()
+        return players.any { it.data.role is DeadByMinecraftKillerRole }
     }
 
     fun numberOfPlayers() : Int { return players.size }
@@ -103,7 +100,7 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
     fun sendMessage(message: Component)
     {
         players.forEach {
-            DeadByMinecraft.Audience.player(it.bukkit).sendMessage(message)
+            DeadByMinecraft.Audience.player(it.bukkit).sendMessage(Identity.nil(), message)
         }
     }
 }

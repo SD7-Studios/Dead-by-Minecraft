@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.wordandahalf.spigot.deadbyminecraft.events.DeadByMinecraftCommandListener
 import org.wordandahalf.spigot.deadbyminecraft.events.DeadByMinecraftEventListener
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
+import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftWorlds
 import java.util.logging.Logger
 
 class DeadByMinecraft : JavaPlugin()

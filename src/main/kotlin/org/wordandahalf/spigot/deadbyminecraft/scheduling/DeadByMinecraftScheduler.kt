@@ -1,7 +1,8 @@
-package org.wordandahalf.spigot.deadbyminecraft
+package org.wordandahalf.spigot.deadbyminecraft.scheduling
 
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitTask
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 
 object DeadByMinecraftScheduler
 {
@@ -78,6 +79,8 @@ object DeadByMinecraftScheduler
      */
     fun scheduleRepeating(task: () -> Unit, delay: Long, period: Long) : BukkitTask
     {
+        DeadByMinecraft.Logger.info("Scheduled new task (delay=$delay,period=$period)")
+
         return Bukkit.getScheduler().runTaskTimer(DeadByMinecraft.Instance, task, delay, period)
     }
 

@@ -5,14 +5,17 @@ import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.entity.Player
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
+import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.DeadByMinecraftPlayerInterface
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.DeadByMinecraftPlayerRole
+import org.wordandahalf.spigot.deadbyminecraft.scheduling.Disposable
 
 /**
  * Wrapper for the Bukkit Player class, providing methods for saving and deleting DBM-related data.
  */
-class DeadByMinecraftPlayer private constructor(val bukkit: Player)
+class DeadByMinecraftPlayer private constructor(val bukkit: Player) : Disposable
 {
     val data = Data()
+    val userInterface = DeadByMinecraftPlayerInterface(this)
 
     /**
      * Object for representing persistent data of a player
@@ -23,6 +26,11 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player)
         var role : DeadByMinecraftPlayerRole? = null
 
         fun getGame() : DeadByMinecraftGame? { return DeadByMinecraftGameManager.getGameByID(gameID ?: return null) }
+    }
+
+    override fun dispose()
+    {
+        userInterface.dispose()
     }
 
     companion object
@@ -41,10 +49,24 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player)
 
             return playerCache[player] as DeadByMinecraftPlayer
         }
-    }
 
-    fun sendMessage(type: ChatMessageType, component: BaseComponent)
-    {
-        this.bukkit.spigot().sendMessage(type, component)
+        /**
+         * Removes and disposes of the mapped DeadByMinecraft player from the cache if it exists
+         */
+        fun remove(player: Player)
+        {
+            val it  = playerCache.iterator()
+            var ref : DeadByMinecraftPlayer? = null
+            while(it.hasNext())
+            {
+                val map = it.next()
+
+                ref = map.value
+                if(map.key == player)
+                    playerCache.remove(player)
+            }
+
+            ref?.dispose()
+        }
     }
 }

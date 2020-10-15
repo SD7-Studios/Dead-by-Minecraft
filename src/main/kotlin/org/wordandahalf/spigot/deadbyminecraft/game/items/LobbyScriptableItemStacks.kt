@@ -1,13 +1,10 @@
-package org.wordandahalf.spigot.deadbyminecraft.items
+package org.wordandahalf.spigot.deadbyminecraft.game.items
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
-import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.ComponentBuilder
+import net.kyori.adventure.text.minimessage.Template
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
@@ -20,7 +17,10 @@ import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMi
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftNurseRole
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftTrapperRole
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftWraithRole
-import org.wordandahalf.spigot.deadbyminecraft.items.menu.HotbarMenu
+import org.wordandahalf.spigot.deadbyminecraft.game.items.menu.HotbarMenu
+import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.DeadByMinecraftPlayerInterface
+import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.Text
+import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.TimedText
 
 //
 // Items that are used in the lobby hotbar menus.

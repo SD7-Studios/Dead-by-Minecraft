@@ -16,7 +16,7 @@ import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.items.ScriptableItemStack
+import org.wordandahalf.spigot.deadbyminecraft.game.items.ScriptableItemStack
 import java.lang.Exception
 import java.lang.NumberFormatException
 import java.util.concurrent.ThreadLocalRandom

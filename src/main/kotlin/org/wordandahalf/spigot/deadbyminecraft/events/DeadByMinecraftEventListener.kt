@@ -5,40 +5,38 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.PlayerDropItemEvent
-import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
+import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftLobbyState
-import org.wordandahalf.spigot.deadbyminecraft.items.ScriptableItemStack
+import org.wordandahalf.spigot.deadbyminecraft.game.items.ScriptableItemStack
 
-class DeadByMinecraftEventListener : Listener
-{
+class DeadByMinecraftEventListener : Listener {
     @EventHandler
-    /**
-     * Handles the edge case when a player is disconnected from a game without it ending
-     */
-    fun onPlayerJoin(e: PlayerJoinEvent)
-    {
+            /**
+             * Handles the edge case when a player is disconnected from a game without it ending
+             */
+    fun onPlayerJoin(e: PlayerJoinEvent) {
         val player = DeadByMinecraftPlayer.of(e.player)
 
-        if(player.data.gameID is Int)
-        {
+        if (player.data.gameID is Int) {
             val game = player.data.getGame()
-            if(game is DeadByMinecraftGame)
-            {
+            if (game is DeadByMinecraftGame) {
                 game.addPlayer(player)
-            }
-            else
-            {
+            } else {
                 player.bukkit.sendMessage("The game you were previously in has ended!")
                 player.data.gameID = null
             }
         }
+    }
+
+    @EventHandler
+    fun onPlayerQuit(e: PlayerQuitEvent)
+    {
+        DeadByMinecraftPlayer.remove(e.player)
     }
 
     @EventHandler

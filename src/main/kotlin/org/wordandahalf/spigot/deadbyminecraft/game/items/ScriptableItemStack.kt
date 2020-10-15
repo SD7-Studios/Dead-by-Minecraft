@@ -1,4 +1,4 @@
-package org.wordandahalf.spigot.deadbyminecraft.items
+package org.wordandahalf.spigot.deadbyminecraft.game.items
 
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
