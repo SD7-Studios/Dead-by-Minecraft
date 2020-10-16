@@ -6,6 +6,8 @@ import net.kyori.adventure.title.Title
 import net.kyori.adventure.util.Ticks
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.Bar
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.Text
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.DeadByMinecraftScheduler
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Disposable
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Tickable

@@ -1,4 +1,4 @@
-package org.wordandahalf.spigot.deadbyminecraft.game.player.ui
+package org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements
 
 import net.kyori.adventure.bossbar.BossBar
 

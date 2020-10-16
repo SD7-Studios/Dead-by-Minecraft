@@ -11,7 +11,7 @@ import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMi
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftTrapperRole
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftWraithRole
 import org.wordandahalf.spigot.deadbyminecraft.game.items.menu.HotbarMenu
-import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.animations.RevealingText
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.animations.RevealingText
 
 //
 // Items that are used in the lobby hotbar menus.

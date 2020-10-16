@@ -14,14 +14,21 @@ import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.items.menu.HotbarMenu
-import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.StaticBar
-import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.StaticText
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.StaticBar
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.StaticText
 
 /**
  * Handles all logic for a DeadByMinecraftGame when it is in the lobby
  */
 class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGameState(game)
 {
+    private enum class State
+    {
+        WAITING_FOR_PLAYERS,    // The lobby is waiting for more players
+        WAITING_FOR_KILLERS,    // The lobby is waiting for one (or more) players to choose to be a killer
+        FINAL_TIMER             // The lobby is waiting for the final countdown to end
+    }
+
     private val playerNpcs : Array<NPC?> = arrayOfNulls(DeadByMinecraftConfig.maxPlayers())
 
     /**
@@ -51,6 +58,17 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
         // Display the default hotbar menu
         HotbarMenu.Lobby.DEFAULT_MENU.display(player.bukkit)
 
+        // Display the bossbar
+        player.userInterface.bossBar(
+                StaticBar(
+                        StaticText("<red>DeadByMinecraft Lobby #${game.id}"),
+                        BossBar.Color.RED,
+                        BossBar.Overlay.PROGRESS,
+                        BossBar.Flag.CREATE_WORLD_FOG,
+                        BossBar.Flag.DARKEN_SCREEN
+                )
+        )
+
         // Teleport the player
         val positions = DeadByMinecraftConfig.lobbySpawnLocation()
         player.bukkit.teleport(Location(game.bukkitLobbyWorld(), positions[0], positions[1], positions[2], positions[3].toFloat(), positions[4].toFloat()))
@@ -59,16 +77,6 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
         player.bukkit.velocity = Vector().zero()
         player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0, true, false, false))
         player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false, false))
-
-        player.userInterface.bossBar(
-            StaticBar(
-                StaticText("<red>DeadByMinecraft Lobby #${game.id}"),
-                BossBar.Color.RED,
-                BossBar.Overlay.PROGRESS,
-                BossBar.Flag.CREATE_WORLD_FOG,
-                BossBar.Flag.DARKEN_SCREEN
-            )
-        )
     }
 
     override fun onPlayerLeave(player: DeadByMinecraftPlayer)
@@ -102,14 +110,8 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
      */
     override fun onLeave()
     {
-        playerNpcs.forEach {
-            it?.destroy()
-            it?.owningRegistry?.deregister(it)
-        }
-
         game.players.forEach {
-            it.bukkit.removePotionEffect(PotionEffectType.SLOW)
-            it.bukkit.removePotionEffect(PotionEffectType.INVISIBILITY)
+            onPlayerLeave(it)
         }
     }
 

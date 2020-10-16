@@ -1,4 +1,4 @@
-package org.wordandahalf.spigot.deadbyminecraft.game.player.ui
+package org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements
 
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Disposable
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Tickable
