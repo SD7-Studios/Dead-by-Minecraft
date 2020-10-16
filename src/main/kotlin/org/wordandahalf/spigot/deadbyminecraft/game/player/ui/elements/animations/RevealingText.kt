@@ -65,8 +65,6 @@ class RevealingText(milliseconds : Long, text: String, vararg template: Template
             multipleCharactersPerTick = true
             charactersPerTick = floor(message.size.toDouble() / (milliseconds.toDouble() / Ticks.SINGLE_TICK_DURATION_MS.toDouble())).toInt()
         }
-
-        DeadByMinecraft.Logger.info("Created RevealingText ($text, ${message.joinToString()}, ${message.size}, $ticksPerCharacter, $charactersPerTick)")
     }
 
     override fun build(): Component?
