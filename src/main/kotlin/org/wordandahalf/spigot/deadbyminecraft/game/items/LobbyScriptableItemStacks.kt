@@ -1,16 +1,12 @@
 package org.wordandahalf.spigot.deadbyminecraft.game.items
 
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.TextColor
-import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.text.minimessage.Template
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
-import org.wordandahalf.spigot.deadbyminecraft.game.notification.RevealingActionBarNotification
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.DeadByMinecraftSurvivorRole
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftKillerRole
@@ -19,8 +15,7 @@ import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMi
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftWraithRole
 import org.wordandahalf.spigot.deadbyminecraft.game.items.menu.HotbarMenu
 import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.DeadByMinecraftPlayerInterface
-import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.Text
-import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.TimedText
+import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.animations.RevealingText
 
 //
 // Items that are used in the lobby hotbar menus.
@@ -39,23 +34,13 @@ class SelectSurvivorItem : ScriptableItemStack(Executor())
             HotbarMenu.Lobby.SURVIVOR_MENU.display(t.player)
 
             // Display a message
-            RevealingActionBarNotification(
-                TextComponent.ofChildren(
-                    Component.text(
-                "You chose to be a ",
-                        TextColor.color(0xFFFBCD), TextDecoration.ITALIC
-                    ),
-                    Component.text(
-                        player.data.role.toString(),
-                        TextColor.color(0x33FF33), TextDecoration.ITALIC, TextDecoration.BOLD
-                    ),
-                    Component.text(
-                        "!",
-                        TextColor.color(0xFFFBCD), TextDecoration.ITALIC
-                    )
-                ),
-            750
-            ).send(t.player)
+            player.userInterface.set(
+                DeadByMinecraftPlayerInterface.Position.ACTION_BAR,
+                RevealingText(
+                        750,
+                    "<color:#FFFBCD><italic>You chose to be a <color:#33FF33><bold>${player.data.role.toString()}</bold><color:#FFFBCD>!",
+                )
+            )
         }
     }
 
@@ -100,22 +85,13 @@ abstract class SelectKillerRoleItem(killerRole: Class<out DeadByMinecraftKillerR
             HotbarMenu.Lobby.KILLER_MENU.display(t.player)
 
             // Display a message
-            RevealingActionBarNotification(
-                TextComponent.ofChildren(
-                    Component.text(
-                        "You chose to be the ", TextColor.color(0xFFFBCD), TextDecoration.ITALIC
-                    ),
-                    Component.text(
-                        player.data.role.toString(),
-                        TextColor.color(0x990000), TextDecoration.ITALIC, TextDecoration.BOLD
-                    ),
-                    Component.text(
-                        "!",
-                        TextColor.color(0xFFFBCD), TextDecoration.ITALIC
-                    )
-                ),
-                1500
-            ).send(t.player)
+            player.userInterface.set(
+                DeadByMinecraftPlayerInterface.Position.ACTION_BAR,
+                RevealingText(
+                    1500,
+                    "<italic><color:#FFFBCD>You chose to be the <bold><color:#990000>${player.data.role.toString()}</bold><color:#FFFBCD>!"
+                )
+            )
         }
     }
 }
