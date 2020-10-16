@@ -63,12 +63,13 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
             }
 
             // Send the title to the player!
+            // We disable the fade-in because it mucks with animated titles.
             DeadByMinecraft.Audience.player(player.bukkit)
                 .showTitle(
                     Title.title(
                         titleText ?: Component.empty(),
                         subtitleText ?: Component.empty(),
-                        Title.Times.of(Duration.ZERO, Ticks.duration(4), Duration.ZERO)
+                        Title.Times.of(Duration.ZERO, Ticks.duration(70), Ticks.duration(20))
                     )
                 )
         }

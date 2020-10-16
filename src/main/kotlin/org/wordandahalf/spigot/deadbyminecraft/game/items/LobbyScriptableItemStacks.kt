@@ -35,9 +35,9 @@ class SelectSurvivorItem : ScriptableItemStack(Executor())
 
             // Display a message
             player.userInterface.set(
-                DeadByMinecraftPlayerInterface.Position.ACTION_BAR,
+                DeadByMinecraftPlayerInterface.Position.SUBTITLE,
                 RevealingText(
-                        750,
+                        1000,
                     "<color:#FFFBCD><italic>You chose to be a <color:#33FF33><bold>${player.data.role.toString()}</bold><color:#FFFBCD>!",
                 )
             )
@@ -62,8 +62,9 @@ class SelectKillerItem : ScriptableItemStack(Executor())
             else
             {
                 // Display a message
-                DeadByMinecraft.Audience.player(t.player).sendActionBar(
-                    Component.text("The killer limit has been reached.", TextColor.fromHexString("#FFFBCD"))
+                player.userInterface.set(
+                    DeadByMinecraftPlayerInterface.Position.SUBTITLE,
+                    RevealingText(1000, "<color:#FFFBCD>The killer limit has been reached.")
                 )
             }
         }
@@ -86,9 +87,9 @@ abstract class SelectKillerRoleItem(killerRole: Class<out DeadByMinecraftKillerR
 
             // Display a message
             player.userInterface.set(
-                DeadByMinecraftPlayerInterface.Position.ACTION_BAR,
+                DeadByMinecraftPlayerInterface.Position.SUBTITLE,
                 RevealingText(
-                    1500,
+                        1000,
                     "<italic><color:#FFFBCD>You chose to be the <bold><color:#990000>${player.data.role.toString()}</bold><color:#FFFBCD>!"
                 )
             )
