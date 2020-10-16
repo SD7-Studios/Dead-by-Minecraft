@@ -1,5 +1,6 @@
-package org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`
+package org.wordandahalf.spigot.deadbyminecraft.game.player.ui
 
+import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.title.Title
 import net.kyori.adventure.util.Ticks
@@ -14,8 +15,8 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
 {
     private val task = DeadByMinecraftScheduler.scheduleRepeating({ this.tick() }, 0, 1)
 
-    private var bossBar: BossBar? = null
-    private var previousBossBar : net.kyori.adventure.bossbar.BossBar? = null
+    private var bossBar: Bar? = null
+    private var previousBossBar : BossBar? = null
 
     private var title : Text? = null
     private var subtitle : Text? = null
@@ -45,9 +46,9 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
 
         // Handle the bossbar
         val bar = bossBar?.build()
-        if(bar is net.kyori.adventure.bossbar.BossBar)
+        if(bar is BossBar)
         {
-            if(previousBossBar is net.kyori.adventure.bossbar.BossBar)
+            if(previousBossBar is BossBar)
             {
                 DeadByMinecraft.Audience.player(player.bukkit).hideBossBar(previousBossBar!!)
             }
@@ -58,7 +59,7 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
         else
         {
             // If the bossBar isn't null and the build bar was, it is requesting to be removed
-            if(bossBar is BossBar)
+            if(bossBar is Bar)
             {
                 bossBar?.dispose()
                 bossBar = null
@@ -122,7 +123,7 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
         }
     }
 
-    fun bossBar(bar: BossBar?) { bossBar?.dispose(); bossBar = bar}
+    fun bossBar(bar: Bar?) { bossBar?.dispose(); bossBar = bar}
 
     fun actionBar(text: Text?) { actionBar?.dispose(); actionBar = text }
     fun title(text: Text?) { title?.dispose(); title = text }

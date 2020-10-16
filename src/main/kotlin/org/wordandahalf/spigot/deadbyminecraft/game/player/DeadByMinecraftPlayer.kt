@@ -1,11 +1,9 @@
 package org.wordandahalf.spigot.deadbyminecraft.game.player
 
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.entity.Player
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
-import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.DeadByMinecraftPlayerInterface
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.DeadByMinecraftPlayerInterface
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.DeadByMinecraftPlayerRole
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Disposable
 

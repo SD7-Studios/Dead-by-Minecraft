@@ -1,8 +1,8 @@
-package org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`
+package org.wordandahalf.spigot.deadbyminecraft.game.player.ui
 
 import net.kyori.adventure.bossbar.BossBar
 
-class StaticBossBar(private val text: Text, private val color: BossBar.Color, private val overlay: BossBar.Overlay, private vararg val flags: BossBar.Flag) : org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.BossBar()
+class StaticBar(private val text: Text, private val color: BossBar.Color, private val overlay: BossBar.Overlay, private vararg val flags: BossBar.Flag) : Bar()
 {
     override fun build(): BossBar?
     {

@@ -1,4 +1,4 @@
-package org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.animations
+package org.wordandahalf.spigot.deadbyminecraft.game.player.ui.animations
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
@@ -7,7 +7,7 @@ import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.Template
 import net.kyori.adventure.util.Ticks
-import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.Text
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.Text
 import kotlin.math.floor
 import kotlin.random.Random
 

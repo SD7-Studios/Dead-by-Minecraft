@@ -14,8 +14,8 @@ import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.items.menu.HotbarMenu
-import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.StaticBossBar
-import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.StaticText
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.StaticBar
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.StaticText
 
 /**
  * Handles all logic for a DeadByMinecraftGame when it is in the lobby
@@ -61,7 +61,7 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
         player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false, false))
 
         player.userInterface.bossBar(
-            StaticBossBar(
+            StaticBar(
                 StaticText("<red>DeadByMinecraft Lobby #${game.id}"),
                 BossBar.Color.RED,
                 BossBar.Overlay.PROGRESS,
