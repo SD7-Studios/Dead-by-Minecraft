@@ -12,14 +12,10 @@ import java.time.Duration
 
 data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPlayer) : Disposable, Tickable
 {
-    enum class Position
-    {
-        ACTION_BAR,
-        TITLE,
-        SUBTITLE
-    }
-
     private val task = DeadByMinecraftScheduler.scheduleRepeating({ this.tick() }, 0, 1)
+
+    private var bossBar: BossBar? = null
+    private var previousBossBar : net.kyori.adventure.bossbar.BossBar? = null
 
     private var title : Text? = null
     private var subtitle : Text? = null
@@ -30,6 +26,8 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
 
     override fun dispose()
     {
+        DeadByMinecraft.Logger.info("Disposing of UI!")
+        bossBar?.dispose()
         title?.dispose()
         subtitle?.dispose()
         actionBar?.dispose()
@@ -40,9 +38,40 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
     override fun tick()
     {
         // Update the interface components
+        bossBar?.dispose()
         title?.tick()
         subtitle?.tick()
         actionBar?.tick()
+
+        // Handle the bossbar
+        val bar = bossBar?.build()
+        if(bar is net.kyori.adventure.bossbar.BossBar)
+        {
+            if(previousBossBar is net.kyori.adventure.bossbar.BossBar)
+            {
+                DeadByMinecraft.Audience.player(player.bukkit).hideBossBar(previousBossBar!!)
+            }
+
+            DeadByMinecraft.Audience.player(player.bukkit).showBossBar(bar)
+            previousBossBar = bar
+        }
+        else
+        {
+            // If the bossBar isn't null and the build bar was, it is requesting to be removed
+            if(bossBar is BossBar)
+            {
+                bossBar?.dispose()
+                bossBar = null
+            }
+            else
+            {
+                // If it is null and the previous value wasn't, we need to hide the bar
+                if(previousBossBar != null)
+                {
+                    DeadByMinecraft.Audience.player(player.bukkit).hideBossBar(previousBossBar!!)
+                }
+            }
+        }
 
         // Handle the title
         val titleText = title?.build()
@@ -54,11 +83,13 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
             // See DeadByMinecraftPlayerInterfaceElement#build
             if(titleText !is Component && title is Text)
             {
+                title?.dispose()
                 title = null
             }
             // Remove the subtitle if the text is null
             if(subtitleText !is Component && subtitle is Text)
             {
+                subtitle?.dispose()
                 subtitle = null
             }
 
@@ -85,22 +116,15 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
             // Remove the actionbar if the text is null
             if(actionBar is Text)
             {
+                actionBar?.dispose()
                 actionBar = null
             }
         }
     }
 
-    /**
-     * Puts the provided text at the provided position.
-     * Passing null for text will remove the current text at that position.
-     */
-    fun set(position: Position, text: Text?)
-    {
-        when(position)
-        {
-            Position.ACTION_BAR -> { actionBar?.dispose(); actionBar = text }
-            Position.TITLE -> { title?.dispose(); title = text }
-            Position.SUBTITLE -> { subtitle?.dispose(); subtitle = text }
-        }
-    }
+    fun bossBar(bar: BossBar?) { bossBar?.dispose(); bossBar = bar}
+
+    fun actionBar(text: Text?) { actionBar?.dispose(); actionBar = text }
+    fun title(text: Text?) { title?.dispose(); title = text }
+    fun subtitle(text: Text?) { subtitle?.dispose(); subtitle = text }
 }

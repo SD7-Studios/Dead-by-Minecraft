@@ -31,8 +31,7 @@ class SelectSurvivorItem : ScriptableItemStack(Executor())
             HotbarMenu.Lobby.SURVIVOR_MENU.display(t.player)
 
             // Display a message
-            player.userInterface.set(
-                DeadByMinecraftPlayerInterface.Position.SUBTITLE,
+            player.userInterface.subtitle(
                 RevealingText(
                         1000,
                     "<color:#FFFBCD><italic>You chose to be a <color:#33FF33><bold>${player.data.role.toString()}</bold><color:#FFFBCD>!",
@@ -51,16 +50,17 @@ class SelectKillerItem : ScriptableItemStack(Executor())
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
             val player = DeadByMinecraftPlayer.of(t.player)
+            val game = DeadByMinecraftGameManager.getGameByPlayer(player)
 
-            if(DeadByMinecraftGameManager.getGameByPlayer(player)?.hasKiller() == false)
+            if(game?.hasKiller() == false)
             {
+                // Display the killer selection menu
                 HotbarMenu.Lobby.KILLER_SELECTION_MENU.display(t.player)
             }
             else
             {
                 // Display a message
-                player.userInterface.set(
-                    DeadByMinecraftPlayerInterface.Position.SUBTITLE,
+                player.userInterface.subtitle(
                     RevealingText(1000, "<color:#FFFBCD>The killer limit has been reached.")
                 )
             }
@@ -83,8 +83,7 @@ abstract class SelectKillerRoleItem(killerRole: Class<out DeadByMinecraftKillerR
             HotbarMenu.Lobby.KILLER_MENU.display(t.player)
 
             // Display a message
-            player.userInterface.set(
-                DeadByMinecraftPlayerInterface.Position.SUBTITLE,
+            player.userInterface.subtitle(
                 RevealingText(
                     1000,
                     "<italic><color:#FFFBCD>You chose to be the <bold><color:#990000>${player.data.role.toString()}</bold><color:#FFFBCD>!"

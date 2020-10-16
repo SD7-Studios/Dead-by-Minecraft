@@ -2,6 +2,7 @@ package org.wordandahalf.spigot.deadbyminecraft.game.states
 
 import net.citizensnpcs.api.CitizensAPI
 import net.citizensnpcs.api.npc.NPC
+import net.kyori.adventure.bossbar.BossBar
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -13,6 +14,8 @@ import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.items.menu.HotbarMenu
+import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.StaticBossBar
+import org.wordandahalf.spigot.deadbyminecraft.game.player.`interface`.StaticText
 
 /**
  * Handles all logic for a DeadByMinecraftGame when it is in the lobby
@@ -56,6 +59,16 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
         player.bukkit.velocity = Vector().zero()
         player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0, true, false, false))
         player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false, false))
+
+        player.userInterface.bossBar(
+            StaticBossBar(
+                StaticText("<red>DeadByMinecraft Lobby #${game.id}"),
+                BossBar.Color.RED,
+                BossBar.Overlay.PROGRESS,
+                BossBar.Flag.CREATE_WORLD_FOG,
+                BossBar.Flag.DARKEN_SCREEN
+            )
+        )
     }
 
     override fun onPlayerLeave(player: DeadByMinecraftPlayer)
@@ -80,6 +93,8 @@ class DeadByMinecraftLobbyState(game: DeadByMinecraftGame) : DeadByMinecraftGame
 
         // Remove any hotbar menu
         HotbarMenu.EMPTY.display(player.bukkit)
+
+        player.userInterface.bossBar(null)
     }
 
     /**
