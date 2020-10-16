@@ -63,7 +63,7 @@ data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPl
             }
 
             // Send the title to the player!
-            // We disable the fade-in because it mucks with animated titles.
+            // The fade-in is disabled because it mucks with animated titles.
             DeadByMinecraft.Audience.player(player.bukkit)
                 .showTitle(
                     Title.title(

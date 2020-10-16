@@ -1,11 +1,8 @@
 package org.wordandahalf.spigot.deadbyminecraft.game.items
 
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.DeadByMinecraftSurvivorRole
@@ -89,7 +86,7 @@ abstract class SelectKillerRoleItem(killerRole: Class<out DeadByMinecraftKillerR
             player.userInterface.set(
                 DeadByMinecraftPlayerInterface.Position.SUBTITLE,
                 RevealingText(
-                        1000,
+                    1000,
                     "<italic><color:#FFFBCD>You chose to be the <bold><color:#990000>${player.data.role.toString()}</bold><color:#FFFBCD>!"
                 )
             )
@@ -109,7 +106,7 @@ class SelectWraithItem : SelectKillerRoleItem(DeadByMinecraftWraithRole::class.j
 
 class SelectNurseItem : SelectKillerRoleItem(DeadByMinecraftNurseRole::class.java)
 {
-    override fun getMaterial() : Material { return Material.GHAST_TEAR }
+    override fun getMaterial() : Material { return Material.BLAZE_POWDER }
 }
 
 class GoBackItem(executor: (t: PlayerInteractEvent, u: ItemStack) -> Unit) : ScriptableItemStack(Executor(executor))
