@@ -1,4 +1,4 @@
-package org.wordandahalf.spigot.deadbyminecraft.game.player.ui.animations
+package org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.animations
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
@@ -7,11 +7,12 @@ import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.Template
 import net.kyori.adventure.util.Ticks
-import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.Text
+import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.Text
 import kotlin.math.floor
 import kotlin.random.Random
 
-/**\
+/**
  * A cool revealing animation!
  */
 class RevealingText(milliseconds : Long, text: String, vararg template: Template) : Text()
@@ -33,9 +34,20 @@ class RevealingText(milliseconds : Long, text: String, vararg template: Template
 
     init
     {
-        MiniMessage.get().parse(text, *template).children().forEach {
-            (it as TextComponent).content().forEach { c ->
-                message.add(Triple(c, false, it.style()))
+        val parsed = MiniMessage.get().parse(text, *template)
+
+        if(parsed.children().isNotEmpty())
+        {
+            parsed.children().forEach {
+                (it as TextComponent).content().forEach { c ->
+                    message.add(Triple(c, false, it.style()))
+                }
+            }
+        }
+        else
+        {
+            (parsed as TextComponent).content().forEach {
+                message.add(Triple(it, false, parsed.style()))
             }
         }
 
@@ -53,6 +65,8 @@ class RevealingText(milliseconds : Long, text: String, vararg template: Template
             multipleCharactersPerTick = true
             charactersPerTick = floor(message.size.toDouble() / (milliseconds.toDouble() / Ticks.SINGLE_TICK_DURATION_MS.toDouble())).toInt()
         }
+
+        DeadByMinecraft.Logger.info("Created RevealingText ($text, ${message.joinToString()}, ${message.size}, $ticksPerCharacter, $charactersPerTick)")
     }
 
     override fun build(): Component?
