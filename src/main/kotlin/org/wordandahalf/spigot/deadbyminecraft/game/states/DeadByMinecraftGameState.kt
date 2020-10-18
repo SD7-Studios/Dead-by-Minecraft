@@ -2,6 +2,7 @@ package org.wordandahalf.spigot.deadbyminecraft.game.states
 
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.scheduling.Tickable
 
 abstract class DeadByMinecraftGameState(val game: DeadByMinecraftGame)
 {

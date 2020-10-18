@@ -1,6 +1,6 @@
 package org.wordandahalf.spigot.deadbyminecraft.game
 
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraftConfig
+import org.wordandahalf.spigot.deadbyminecraft.config.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import java.util.*
 
@@ -41,7 +41,7 @@ object DeadByMinecraftGameManager
     {
         val id : Int = getNextGameID()
 
-        games[id] = DeadByMinecraftGame(id, DeadByMinecraftConfig.maxPlayers())
+        games[id] = DeadByMinecraftGame(id, DeadByMinecraftConfig.Main.maxPlayers)
 
         return id
     }

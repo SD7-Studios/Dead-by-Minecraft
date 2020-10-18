@@ -3,10 +3,11 @@ package org.wordandahalf.spigot.deadbyminecraft
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
+import org.wordandahalf.spigot.deadbyminecraft.config.DeadByMinecraftConfig
 import org.wordandahalf.spigot.deadbyminecraft.events.DeadByMinecraftCommandListener
 import org.wordandahalf.spigot.deadbyminecraft.events.DeadByMinecraftEventListener
 import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftWorlds
+import org.wordandahalf.spigot.deadbyminecraft.game.worlds.DeadByMinecraftWorlds
 import java.util.logging.Logger
 
 class DeadByMinecraft : JavaPlugin()
@@ -22,14 +23,14 @@ class DeadByMinecraft : JavaPlugin()
     }
 
     override fun onEnable()
-    {
+{
         Instance = this
         Logger = this.logger
 
         Instance.logger.info("Dead by Minecraft has loaded!")
 
-        // Saves the provided configuration file if none exists
-        saveDefaultConfig()
+        DeadByMinecraftConfig.load()
+        Logger.info("Max players: " + DeadByMinecraftConfig.Main.maxPlayers)
 
         // Registers the event listener
         server.pluginManager.registerEvents(DeadByMinecraftEventListener(), this)
@@ -44,7 +45,7 @@ class DeadByMinecraft : JavaPlugin()
 
         // If debug mode is enabled, automatically start a game
         if(DEBUG)
-            DeadByMinecraftGameManager.createGame();
+            DeadByMinecraftGameManager.createGame()
     }
 
     override fun onDisable()

@@ -1,16 +1,14 @@
 package org.wordandahalf.spigot.deadbyminecraft.game
 
-import com.grinderwolf.swm.api.world.SlimeWorld
 import net.kyori.adventure.identity.Identity
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
-import org.bukkit.Bukkit
-import org.bukkit.World
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftKillerRole
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftGameState
 import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftLobbyState
+import org.wordandahalf.spigot.deadbyminecraft.game.worlds.DeadByMinecraftWorlds
 
 /**
  * Represents a game of Dead by Minecraft and all associated data.
@@ -19,8 +17,8 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
 {
     val players : ArrayList<DeadByMinecraftPlayer> = ArrayList(maxPlayers)
 
-    private val lobbyWorld : SlimeWorld = DeadByMinecraftWorlds.cloneLobby()
-    private val gameWorld : SlimeWorld = DeadByMinecraftWorlds.cloneGame()
+    val lobbyWorld = DeadByMinecraftWorlds.cloneLobby()
+    val gameWorld = DeadByMinecraftWorlds.cloneGame()
 
     var state : DeadByMinecraftGameState = DeadByMinecraftLobbyState(this)
         set(newState)
@@ -93,9 +91,6 @@ class DeadByMinecraftGame(val id: Int, val maxPlayers: Int)
     //
     // World functions
     //
-
-    fun bukkitLobbyWorld() : World { return Bukkit.getWorld(lobbyWorld.name)!! }
-    fun bukkitGameWorld() : World { return Bukkit.getWorld(gameWorld.name)!! }
 
     fun sendMessage(message: Component)
     {
