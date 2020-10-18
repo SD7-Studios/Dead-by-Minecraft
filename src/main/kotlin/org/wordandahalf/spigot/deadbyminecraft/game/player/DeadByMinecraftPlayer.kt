@@ -23,7 +23,7 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player) : Disposable
         var gameID : Int? = null
         var role : DeadByMinecraftPlayerRole? = null
 
-        fun getGame() : DeadByMinecraftGame? { return DeadByMinecraftGameManager.getGameByID(gameID ?: return null) }
+        fun getGame() : DeadByMinecraftGame? { return DeadByMinecraftGameManager.byID(gameID ?: return null) }
     }
 
     override fun dispose()

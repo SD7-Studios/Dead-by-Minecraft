@@ -10,7 +10,7 @@ import java.util.*
 object DeadByMinecraftGameManager
 {
     private val games : TreeMap<Int, DeadByMinecraftGame> = TreeMap()
-    private fun getNextGameID() : Int
+    private fun nextID() : Int
     {
         // If there are no games
         if(games.size == 0)
@@ -37,9 +37,9 @@ object DeadByMinecraftGameManager
      * Creates a new game
      * @return the ID of the new game
      */
-    fun createGame() : Int
+    fun create() : Int
     {
-        val id : Int = getNextGameID()
+        val id : Int = nextID()
 
         games[id] = DeadByMinecraftGame(id, DeadByMinecraftConfig.Main.maxPlayers)
 
@@ -50,22 +50,22 @@ object DeadByMinecraftGameManager
      * Removes a game with the provided ID
      * @return whether the game was removed
      */
-    fun removeGame(id : Int) : Boolean
+    fun remove(id : Int) : Boolean
     {
         if(id > games.size - 1) return false else games[id]?.stop(); games.remove(id); return true
     }
 
-    fun getGames() : Array<DeadByMinecraftGame>
+    fun all() : Array<DeadByMinecraftGame>
     {
         return games.values.toTypedArray()
     }
 
-    fun getGameByID(id : Int) : DeadByMinecraftGame?
+    fun byID(id : Int) : DeadByMinecraftGame?
     {
         return games[id]
     }
 
-    fun getGameByPlayer(player : DeadByMinecraftPlayer) : DeadByMinecraftGame?
+    fun byPlayer(player : DeadByMinecraftPlayer) : DeadByMinecraftGame?
     {
         return games.values.firstOrNull { it.players.contains(player) }
     }

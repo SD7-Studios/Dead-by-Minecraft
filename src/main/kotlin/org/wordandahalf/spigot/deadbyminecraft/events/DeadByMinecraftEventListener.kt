@@ -36,6 +36,8 @@ class DeadByMinecraftEventListener : Listener {
     @EventHandler
     fun onPlayerQuit(e: PlayerQuitEvent)
     {
+        val player = DeadByMinecraftPlayer.of(e.player)
+        DeadByMinecraftGameManager.byPlayer(player)?.removePlayer(player)
         DeadByMinecraftPlayer.remove(e.player)
     }
 

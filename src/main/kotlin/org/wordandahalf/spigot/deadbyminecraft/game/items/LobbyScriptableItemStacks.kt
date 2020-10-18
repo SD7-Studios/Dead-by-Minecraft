@@ -49,7 +49,7 @@ class SelectKillerItem : ScriptableItemStack(Executor())
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
             val player = DeadByMinecraftPlayer.of(t.player)
-            val game = DeadByMinecraftGameManager.getGameByPlayer(player)
+            val game = DeadByMinecraftGameManager.byPlayer(player)
 
             if(game?.hasKiller() == false)
             {

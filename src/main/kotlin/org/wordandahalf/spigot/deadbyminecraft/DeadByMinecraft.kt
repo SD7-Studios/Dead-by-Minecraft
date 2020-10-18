@@ -45,13 +45,13 @@ class DeadByMinecraft : JavaPlugin()
 
         // If debug mode is enabled, automatically start a game
         if(DEBUG)
-            DeadByMinecraftGameManager.createGame()
+            DeadByMinecraftGameManager.create()
     }
 
     override fun onDisable()
     {
         // Stop all games
-        DeadByMinecraftGameManager.getGames().forEach { it.stop() }
+        DeadByMinecraftGameManager.all().forEach { it.stop() }
 
         // Stop all tasks
         Bukkit.getScheduler().cancelTasks(this)
