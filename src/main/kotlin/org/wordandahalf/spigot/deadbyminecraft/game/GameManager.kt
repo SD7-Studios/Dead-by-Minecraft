@@ -64,9 +64,4 @@ object GameManager
     {
         return games[id]
     }
-
-    fun byPlayer(player : DeadByMinecraftPlayer) : Game?
-    {
-        return games.values.firstOrNull { it.players.contains(player) }
-    }
 }
