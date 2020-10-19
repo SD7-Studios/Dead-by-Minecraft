@@ -1,9 +1,9 @@
 package org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer
 
-class DeadByMinecraftTrapperRole : DeadByMinecraftKillerRole()
+class WraithRole : KillerRole()
 {
     override fun toString(): String
     {
-        return "Trapper"
+        return "Wraith"
     }
 }

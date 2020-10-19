@@ -3,13 +3,13 @@ package org.wordandahalf.spigot.deadbyminecraft.game.items
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
+import org.wordandahalf.spigot.deadbyminecraft.game.GameManager
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.DeadByMinecraftSurvivorRole
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftKillerRole
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftNurseRole
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftTrapperRole
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.DeadByMinecraftWraithRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.SurvivorRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.KillerRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.NurseRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.TrapperRole
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.WraithRole
 import org.wordandahalf.spigot.deadbyminecraft.game.items.menu.HotbarMenu
 import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.animations.RevealingText
 
@@ -25,7 +25,7 @@ class SelectSurvivorItem : ScriptableItemStack(Executor())
         {
             // Give the player the survivor role
             val player = DeadByMinecraftPlayer.of(t.player)
-            player.data.role = DeadByMinecraftSurvivorRole()
+            player.data.role = SurvivorRole()
             // Display the survivor menu
             HotbarMenu.Lobby.SURVIVOR_MENU.display(t.player)
 
@@ -49,7 +49,7 @@ class SelectKillerItem : ScriptableItemStack(Executor())
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
             val player = DeadByMinecraftPlayer.of(t.player)
-            val game = DeadByMinecraftGameManager.byPlayer(player)
+            val game = GameManager.byPlayer(player)
 
             if(game?.hasKiller() == false)
             {
@@ -69,9 +69,9 @@ class SelectKillerItem : ScriptableItemStack(Executor())
     override fun getMaterial() : Material { return Material.GUNPOWDER }
 }
 
-abstract class SelectKillerRoleItem(killerRole: Class<out DeadByMinecraftKillerRole>) : ScriptableItemStack(Executor(killerRole))
+abstract class SelectKillerRoleItem(killerRole: Class<out KillerRole>) : ScriptableItemStack(Executor(killerRole))
 {
-    class Executor(private val killerRole: Class<out DeadByMinecraftKillerRole>) : ScriptableItemStack.Executor()
+    class Executor(private val killerRole: Class<out KillerRole>) : ScriptableItemStack.Executor()
     {
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
@@ -92,17 +92,17 @@ abstract class SelectKillerRoleItem(killerRole: Class<out DeadByMinecraftKillerR
     }
 }
 
-class SelectTrapperItem : SelectKillerRoleItem(DeadByMinecraftTrapperRole::class.java)
+class SelectTrapperItem : SelectKillerRoleItem(TrapperRole::class.java)
 {
     override fun getMaterial() : Material { return Material.MAGMA_CREAM }
 }
 
-class SelectWraithItem : SelectKillerRoleItem(DeadByMinecraftWraithRole::class.java)
+class SelectWraithItem : SelectKillerRoleItem(WraithRole::class.java)
 {
     override fun getMaterial() : Material { return Material.GHAST_TEAR }
 }
 
-class SelectNurseItem : SelectKillerRoleItem(DeadByMinecraftNurseRole::class.java)
+class SelectNurseItem : SelectKillerRoleItem(NurseRole::class.java)
 {
     override fun getMaterial() : Material { return Material.BLAZE_POWDER }
 }

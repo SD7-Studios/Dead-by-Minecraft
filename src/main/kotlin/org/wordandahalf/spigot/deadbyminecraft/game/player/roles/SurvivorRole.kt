@@ -1,6 +1,6 @@
 package org.wordandahalf.spigot.deadbyminecraft.game.player.roles
 
-class DeadByMinecraftSurvivorRole : DeadByMinecraftPlayerRole()
+class SurvivorRole : PlayerRole()
 {
     override fun toString(): String
     {

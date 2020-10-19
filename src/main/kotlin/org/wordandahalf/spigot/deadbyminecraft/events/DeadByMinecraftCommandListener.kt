@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
+import org.wordandahalf.spigot.deadbyminecraft.game.Game
+import org.wordandahalf.spigot.deadbyminecraft.game.GameManager
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.items.ScriptableItemStack
 import java.lang.NumberFormatException
@@ -53,7 +53,7 @@ class DeadByMinecraftCommandListener : CommandExecutor
             if(args.size != 1)
                 return false
 
-            if(DeadByMinecraftGameManager.all().isEmpty())
+            if(GameManager.all().isEmpty())
             {
                 sender.sendMessage("There are no games currently running.")
                 return true
@@ -65,7 +65,7 @@ class DeadByMinecraftCommandListener : CommandExecutor
             data.title = "Dead by Minecraft Games"
             data.author = ""
 
-            DeadByMinecraftGameManager.all().forEach {
+            GameManager.all().forEach {
                 data.addPage("Game #${it.id}\nIn ${it.state}\n${it.numberOfPlayers()}/${it.maxPlayers}")
             }
 
@@ -86,7 +86,7 @@ class DeadByMinecraftCommandListener : CommandExecutor
             if(args.size != 1)
                 return false
 
-            val newGameID = DeadByMinecraftGameManager.create()
+            val newGameID = GameManager.create()
 
             sender.sendMessage("Created game #$newGameID!")
             return true
@@ -99,7 +99,7 @@ class DeadByMinecraftCommandListener : CommandExecutor
     {
         override fun execute(sender: CommandSender, args: Array<out String>): Boolean
         {
-            return if(DeadByMinecraftGameManager.remove(args[1].toInt())) {
+            return if(GameManager.remove(args[1].toInt())) {
                 sender.sendMessage("Stopped game ${args[1]}...")
                 true
             } else {
@@ -123,9 +123,9 @@ class DeadByMinecraftCommandListener : CommandExecutor
 
             try
             {
-                val gameToJoin = DeadByMinecraftGameManager.byID(args[1].toInt())
+                val gameToJoin = GameManager.byID(args[1].toInt())
 
-                if(gameToJoin is DeadByMinecraftGame)
+                if(gameToJoin is Game)
                 {
                     gameToJoin.addPlayer(DeadByMinecraftPlayer.of(sender))
                 }
@@ -153,7 +153,7 @@ class DeadByMinecraftCommandListener : CommandExecutor
             if(args.size != 1)
                 return false
 
-            if(sender.data.getGame() is DeadByMinecraftGame)
+            if(sender.data.getGame() is Game)
             {
                 sender.data.getGame()?.removePlayer(sender)
             }

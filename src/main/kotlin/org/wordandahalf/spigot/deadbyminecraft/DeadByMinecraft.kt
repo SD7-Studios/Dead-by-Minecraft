@@ -3,11 +3,11 @@ package org.wordandahalf.spigot.deadbyminecraft
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
-import org.wordandahalf.spigot.deadbyminecraft.config.DeadByMinecraftConfig
+import org.wordandahalf.spigot.deadbyminecraft.config.Config
 import org.wordandahalf.spigot.deadbyminecraft.events.DeadByMinecraftCommandListener
 import org.wordandahalf.spigot.deadbyminecraft.events.DeadByMinecraftEventListener
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
-import org.wordandahalf.spigot.deadbyminecraft.game.worlds.DeadByMinecraftWorlds
+import org.wordandahalf.spigot.deadbyminecraft.game.GameManager
+import org.wordandahalf.spigot.deadbyminecraft.game.worlds.Worlds
 import java.util.logging.Logger
 
 class DeadByMinecraft : JavaPlugin()
@@ -29,8 +29,8 @@ class DeadByMinecraft : JavaPlugin()
 
         Instance.logger.info("Dead by Minecraft has loaded!")
 
-        DeadByMinecraftConfig.load()
-        Logger.info("Max players: " + DeadByMinecraftConfig.Main.maxPlayers)
+        Config.load()
+        Logger.info("Max players: " + Config.Main.maxPlayers)
 
         // Registers the event listener
         server.pluginManager.registerEvents(DeadByMinecraftEventListener(), this)
@@ -39,19 +39,19 @@ class DeadByMinecraft : JavaPlugin()
         getCommand("dbm")!!.setExecutor(DeadByMinecraftCommandListener());
 
         // Loads world templates into memory
-        DeadByMinecraftWorlds.loadTemplates()
+        Worlds.loadTemplates()
 
         Audience = BukkitAudiences.create(this)
 
         // If debug mode is enabled, automatically start a game
         if(DEBUG)
-            DeadByMinecraftGameManager.create()
+            GameManager.create()
     }
 
     override fun onDisable()
     {
         // Stop all games
-        DeadByMinecraftGameManager.all().forEach { it.stop() }
+        GameManager.all().forEach { it.stop() }
 
         // Stop all tasks
         Bukkit.getScheduler().cancelTasks(this)

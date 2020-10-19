@@ -4,7 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitTask
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 
-object DeadByMinecraftScheduler
+object Scheduler
 {
     /**
      * Returns a task that will run on the next server tick.

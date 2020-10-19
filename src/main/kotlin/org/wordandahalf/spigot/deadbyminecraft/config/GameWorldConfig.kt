@@ -6,7 +6,7 @@ import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 
 @ConfigSerializable
-class DeadByMinecraftGameWorldConfig
+class GameWorldConfig
 {
     @Setting
     var time = 18000L
@@ -19,9 +19,9 @@ class DeadByMinecraftGameWorldConfig
 
     companion object
     {
-        private val MAPPER = ObjectMapper.forClass(DeadByMinecraftGameWorldConfig::class.java)
+        private val MAPPER = ObjectMapper.forClass(GameWorldConfig::class.java)
 
-        fun loadFrom(node: ConfigurationNode): DeadByMinecraftGameWorldConfig {
+        fun loadFrom(node: ConfigurationNode): GameWorldConfig {
             return MAPPER.bindToNew().populate(node)
         }
     }

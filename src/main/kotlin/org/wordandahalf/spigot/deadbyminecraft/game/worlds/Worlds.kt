@@ -6,12 +6,12 @@ import com.grinderwolf.swm.api.world.properties.SlimeProperties
 import com.grinderwolf.swm.api.world.properties.SlimePropertyMap
 import org.bukkit.Bukkit
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
-import org.wordandahalf.spigot.deadbyminecraft.config.DeadByMinecraftConfig
+import org.wordandahalf.spigot.deadbyminecraft.config.Config
 import java.lang.Exception
 import java.util.*
 import kotlin.random.Random
 
-object DeadByMinecraftWorlds
+object Worlds
 {
     private val loadedLobbyWorlds = HashMap<String, SlimeWorld>()
     private val loadedGameWorlds = HashMap<String, SlimeWorld>()
@@ -38,7 +38,7 @@ object DeadByMinecraftWorlds
             properties.setString(SlimeProperties.WORLD_TYPE, "customized")
 
             // Load the lobby template, allow modification if debug mode is enabled
-            DeadByMinecraftConfig.Worlds.Lobby.keys.forEach {
+            Config.Worlds.Lobby.keys.forEach {
                 loadedLobbyWorlds[it] = slimePlugin.loadWorld(loader, it, !DeadByMinecraft.DEBUG, properties)
                 slimePlugin.generateWorld(loadedLobbyWorlds[it])
             }
@@ -48,7 +48,7 @@ object DeadByMinecraftWorlds
             properties.setBoolean(SlimeProperties.PVP, false)
 
             // ""
-            DeadByMinecraftConfig.Worlds.Game.keys.forEach {
+            Config.Worlds.Game.keys.forEach {
                 loadedGameWorlds[it] = slimePlugin.loadWorld(loader, it, !DeadByMinecraft.DEBUG, properties)
                 slimePlugin.generateWorld(loadedGameWorlds[it])
             }
@@ -62,7 +62,7 @@ object DeadByMinecraftWorlds
         return true
     }
 
-    fun cloneLobby() : DeadByMinecraftLobbyWorld
+    fun cloneLobby() : LobbyWorld
     {
         // Load a copy of the lobby template with a guaranteed random name
         val templateWorld = loadedLobbyWorlds.values.toTypedArray()[Random.nextInt(loadedLobbyWorlds.size)]
@@ -70,13 +70,13 @@ object DeadByMinecraftWorlds
         (Bukkit.getPluginManager().getPlugin("SlimeWorldManager") as SlimePlugin).generateWorld(clonedWorld)
 
         // Set the time as is it is in the config
-        val config = DeadByMinecraftConfig.Worlds.Lobby[templateWorld.name]!!
+        val config = Config.Worlds.Lobby[templateWorld.name]!!
         Bukkit.getWorld(clonedWorld.name)!!.time = config.time
 
-        return DeadByMinecraftLobbyWorld(clonedWorld, config)
+        return LobbyWorld(clonedWorld, config)
     }
 
-    fun cloneGame() : DeadByMinecraftGameWorld
+    fun cloneGame() : GameWorld
     {
         // Load a copy of the game template with a guaranteed random name
         val templateWorld = loadedGameWorlds.values.toTypedArray()[Random.nextInt(loadedGameWorlds.size)]
@@ -84,9 +84,9 @@ object DeadByMinecraftWorlds
         (Bukkit.getPluginManager().getPlugin("SlimeWorldManager") as SlimePlugin).generateWorld(clonedWorld)
 
         // Set the time as is in the config
-        val config = DeadByMinecraftConfig.Worlds.Game[templateWorld.name]!!
+        val config = Config.Worlds.Game[templateWorld.name]!!
         Bukkit.getWorld(clonedWorld.name)!!.time = config.time
 
-        return DeadByMinecraftGameWorld(clonedWorld, config)
+        return GameWorld(clonedWorld, config)
     }
 }

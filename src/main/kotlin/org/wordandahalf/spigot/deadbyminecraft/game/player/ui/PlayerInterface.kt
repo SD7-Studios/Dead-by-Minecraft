@@ -8,14 +8,14 @@ import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.Bar
 import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.Text
-import org.wordandahalf.spigot.deadbyminecraft.scheduling.DeadByMinecraftScheduler
+import org.wordandahalf.spigot.deadbyminecraft.scheduling.Scheduler
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Disposable
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Tickable
 import java.time.Duration
 
-data class DeadByMinecraftPlayerInterface(private val player : DeadByMinecraftPlayer) : Disposable, Tickable
+data class PlayerInterface(private val player : DeadByMinecraftPlayer) : Disposable, Tickable
 {
-    private val task = DeadByMinecraftScheduler.scheduleRepeating({ this.tick() }, 0, 1)
+    private val task = Scheduler.scheduleRepeating({ this.tick() }, 0, 1)
 
     private var bossBar: Bar? = null
     private var previousBossBar : BossBar? = null

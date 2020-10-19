@@ -10,10 +10,9 @@ import ninja.leaping.configurate.objectmapping.serialize.TypeSerializerCollectio
 import org.bukkit.configuration.InvalidConfigurationException
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import java.io.File
-import java.io.FilenameFilter
 
 @ConfigSerializable
-class DeadByMinecraftConfig
+class Config
 {
     @Setting(value = "min-players")
     var minPlayers = 4
@@ -34,8 +33,8 @@ class DeadByMinecraftConfig
 
     object Worlds
     {
-        val Lobby = HashMap<String, DeadByMinecraftLobbyWorldConfig>()
-        val Game = HashMap<String, DeadByMinecraftGameWorldConfig>()
+        val Lobby = HashMap<String, LobbyWorldConfig>()
+        val Game = HashMap<String, GameWorldConfig>()
     }
 
     companion object
@@ -48,11 +47,11 @@ class DeadByMinecraftConfig
         private val MAIN_CONFIG_LOADER = GsonConfigurationLoader.builder().setFile(MAIN_CONFIG_FILE).build()
         private val CONFIG_OPTIONS = ConfigurationOptions.defaults().withSerializers(TypeSerializerCollection.defaults().newChild())
 
-        private val MAPPER = ObjectMapper.forClass(DeadByMinecraftConfig::class.java)
+        private val MAPPER = ObjectMapper.forClass(Config::class.java)
 
-        lateinit var Main: DeadByMinecraftConfig
+        lateinit var Main: Config
 
-        private fun loadFrom(node: ConfigurationNode) : DeadByMinecraftConfig
+        private fun loadFrom(node: ConfigurationNode) : Config
         {
             return MAPPER.bindToNew().populate(node)
         }
@@ -115,7 +114,7 @@ class DeadByMinecraftConfig
 
                 try
                 {
-                    Worlds.Lobby[it.nameWithoutExtension] = DeadByMinecraftLobbyWorldConfig.loadFrom(configRoot)
+                    Worlds.Lobby[it.nameWithoutExtension] = LobbyWorldConfig.loadFrom(configRoot)
                 }
                 catch (e: Exception)
                 {
@@ -138,7 +137,7 @@ class DeadByMinecraftConfig
 
                 try
                 {
-                    Worlds.Game[it.nameWithoutExtension] = DeadByMinecraftGameWorldConfig.loadFrom(configRoot)
+                    Worlds.Game[it.nameWithoutExtension] = GameWorldConfig.loadFrom(configRoot)
                 }
                 catch (e: Exception)
                 {
@@ -155,7 +154,7 @@ class DeadByMinecraftConfig
                 DeadByMinecraft.Logger.info("Creating example lobby world config at '${exampleLobbyWorldConfig.path}'")
                 val root = ConfigurationNode.root(CONFIG_OPTIONS.withHeader("Example lobby world configuration"))
                 val loader = GsonConfigurationLoader.builder().setFile(exampleLobbyWorldConfig).build()
-                DeadByMinecraftLobbyWorldConfig().saveTo(root)
+                LobbyWorldConfig().saveTo(root)
                 loader.save(root)
             }
 
@@ -165,7 +164,7 @@ class DeadByMinecraftConfig
                 DeadByMinecraft.Logger.info("Creating example game world config at '${exampleGameWorldConfig.path}'")
                 val root = ConfigurationNode.root(CONFIG_OPTIONS.withHeader("Example game world configuration"))
                 val loader = GsonConfigurationLoader.builder().setFile(exampleGameWorldConfig).build()
-                DeadByMinecraftGameWorldConfig().saveTo(root)
+                GameWorldConfig().saveTo(root)
                 loader.save(root)
             }
         }

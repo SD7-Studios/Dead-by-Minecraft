@@ -1,10 +1,10 @@
 package org.wordandahalf.spigot.deadbyminecraft.game.player
 
 import org.bukkit.entity.Player
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
-import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.DeadByMinecraftPlayerInterface
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.DeadByMinecraftPlayerRole
+import org.wordandahalf.spigot.deadbyminecraft.game.Game
+import org.wordandahalf.spigot.deadbyminecraft.game.GameManager
+import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.PlayerInterface
+import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.PlayerRole
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Disposable
 
 /**
@@ -13,7 +13,7 @@ import org.wordandahalf.spigot.deadbyminecraft.scheduling.Disposable
 class DeadByMinecraftPlayer private constructor(val bukkit: Player) : Disposable
 {
     val data = Data()
-    val userInterface = DeadByMinecraftPlayerInterface(this)
+    val userInterface = PlayerInterface(this)
 
     /**
      * Object for representing persistent data of a player
@@ -21,9 +21,9 @@ class DeadByMinecraftPlayer private constructor(val bukkit: Player) : Disposable
     class Data
     {
         var gameID : Int? = null
-        var role : DeadByMinecraftPlayerRole? = null
+        var role : PlayerRole? = null
 
-        fun getGame() : DeadByMinecraftGame? { return DeadByMinecraftGameManager.byID(gameID ?: return null) }
+        fun getGame() : Game? { return GameManager.byID(gameID ?: return null) }
     }
 
     override fun dispose()

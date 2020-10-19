@@ -6,7 +6,7 @@ import org.wordandahalf.spigot.deadbyminecraft.scheduling.Tickable
 /**
  * Represents an element of a player's interface
  */
-interface DeadByMinecraftPlayerInterfaceElement<T> : Disposable, Tickable
+interface PlayerInterfaceElement<T> : Disposable, Tickable
 {
     /**
      * Returns a form of this element that can be sent to the client, or null.

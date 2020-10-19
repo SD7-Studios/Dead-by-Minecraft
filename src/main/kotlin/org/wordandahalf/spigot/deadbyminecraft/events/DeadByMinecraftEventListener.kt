@@ -8,10 +8,10 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGame
-import org.wordandahalf.spigot.deadbyminecraft.game.DeadByMinecraftGameManager
+import org.wordandahalf.spigot.deadbyminecraft.game.Game
+import org.wordandahalf.spigot.deadbyminecraft.game.GameManager
 import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.game.states.DeadByMinecraftLobbyState
+import org.wordandahalf.spigot.deadbyminecraft.game.states.LobbyState
 import org.wordandahalf.spigot.deadbyminecraft.game.items.ScriptableItemStack
 
 class DeadByMinecraftEventListener : Listener {
@@ -24,7 +24,7 @@ class DeadByMinecraftEventListener : Listener {
 
         if (player.data.gameID is Int) {
             val game = player.data.getGame()
-            if (game is DeadByMinecraftGame) {
+            if (game is Game) {
                 game.addPlayer(player)
             } else {
                 player.bukkit.sendMessage("The game you were previously in has ended!")
@@ -37,7 +37,7 @@ class DeadByMinecraftEventListener : Listener {
     fun onPlayerQuit(e: PlayerQuitEvent)
     {
         val player = DeadByMinecraftPlayer.of(e.player)
-        DeadByMinecraftGameManager.byPlayer(player)?.removePlayer(player)
+        GameManager.byPlayer(player)?.removePlayer(player)
         DeadByMinecraftPlayer.remove(e.player)
     }
 
@@ -48,9 +48,9 @@ class DeadByMinecraftEventListener : Listener {
     fun onPlayerMove(e: PlayerMoveEvent)
     {
         val game = DeadByMinecraftPlayer.of(e.player).data.getGame()
-        if(game is DeadByMinecraftGame)
+        if(game is Game)
         {
-            if(game.state is DeadByMinecraftLobbyState)
+            if(game.state is LobbyState)
             {
                 e.player.velocity = Vector().zero()
                 e.isCancelled = true
@@ -67,7 +67,7 @@ class DeadByMinecraftEventListener : Listener {
         if(e.whoClicked !is Player)
             return
 
-        if(DeadByMinecraftPlayer.of(e.whoClicked as Player).data.getGame() is DeadByMinecraftGame)
+        if(DeadByMinecraftPlayer.of(e.whoClicked as Player).data.getGame() is Game)
         {
             e.isCancelled = true
         }
@@ -79,7 +79,7 @@ class DeadByMinecraftEventListener : Listener {
      */
     fun onPlayerDropItem(e: PlayerDropItemEvent)
     {
-        if(DeadByMinecraftPlayer.of(e.player).data.getGame() is DeadByMinecraftGame)
+        if(DeadByMinecraftPlayer.of(e.player).data.getGame() is Game)
         {
             e.isCancelled = true
         }
@@ -93,7 +93,7 @@ class DeadByMinecraftEventListener : Listener {
             ScriptableItemStack.getExecutor(e.item as ItemStack)?.accept(e, e.item as ItemStack)
         }
 
-        if(DeadByMinecraftPlayer.of(e.player).data.getGame() is DeadByMinecraftGame)
+        if(DeadByMinecraftPlayer.of(e.player).data.getGame() is Game)
         {
             e.isCancelled = true
             return
