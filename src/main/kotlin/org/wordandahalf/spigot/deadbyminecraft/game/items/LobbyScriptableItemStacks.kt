@@ -3,15 +3,14 @@ package org.wordandahalf.spigot.deadbyminecraft.game.items
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import org.wordandahalf.spigot.deadbyminecraft.game.GameManager
-import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.SurvivorRole
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.KillerRole
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.NurseRole
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.TrapperRole
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.WraithRole
+import org.wordandahalf.spigot.deadbyminecraft.player.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.player.roles.SurvivorRole
+import org.wordandahalf.spigot.deadbyminecraft.player.roles.killer.KillerRole
+import org.wordandahalf.spigot.deadbyminecraft.player.roles.killer.NurseRole
+import org.wordandahalf.spigot.deadbyminecraft.player.roles.killer.TrapperRole
+import org.wordandahalf.spigot.deadbyminecraft.player.roles.killer.WraithRole
 import org.wordandahalf.spigot.deadbyminecraft.game.items.menu.HotbarMenu
-import org.wordandahalf.spigot.deadbyminecraft.game.player.ui.elements.animations.RevealingText
+import org.wordandahalf.spigot.deadbyminecraft.player.ui.elements.animations.RevealingText
 
 //
 // Items that are used in the lobby hotbar menus.

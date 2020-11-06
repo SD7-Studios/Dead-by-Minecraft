@@ -1,7 +1,7 @@
 package org.wordandahalf.spigot.deadbyminecraft.game.items.menu
 
 import org.bukkit.entity.Player
-import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.items.*
 import java.security.InvalidParameterException
 

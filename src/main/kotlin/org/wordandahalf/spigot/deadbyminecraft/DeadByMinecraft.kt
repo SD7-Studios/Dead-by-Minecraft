@@ -4,10 +4,10 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.wordandahalf.spigot.deadbyminecraft.config.Config
-import org.wordandahalf.spigot.deadbyminecraft.events.listeners.CommandListener
-import org.wordandahalf.spigot.deadbyminecraft.events.listeners.MinecraftEventListener
+import org.wordandahalf.spigot.deadbyminecraft.listeners.CommandListener
+import org.wordandahalf.spigot.deadbyminecraft.listeners.EventListener
 import org.wordandahalf.spigot.deadbyminecraft.game.GameManager
-import org.wordandahalf.spigot.deadbyminecraft.game.worlds.Worlds
+import org.wordandahalf.spigot.deadbyminecraft.worlds.Worlds
 import java.util.logging.Logger
 
 class DeadByMinecraft : JavaPlugin()
@@ -33,7 +33,7 @@ class DeadByMinecraft : JavaPlugin()
         Logger.info("Max players: " + Config.Main.maxPlayers)
 
         // Registers the event listener
-        server.pluginManager.registerEvents(MinecraftEventListener(), this)
+        server.pluginManager.registerEvents(EventListener(), this)
 
         // Registers the /dbm command
         getCommand("dbm")!!.setExecutor(CommandListener());

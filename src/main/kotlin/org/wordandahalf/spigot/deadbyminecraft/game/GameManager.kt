@@ -1,7 +1,6 @@
 package org.wordandahalf.spigot.deadbyminecraft.game
 
 import org.wordandahalf.spigot.deadbyminecraft.config.Config
-import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
 import java.util.*
 
 /**

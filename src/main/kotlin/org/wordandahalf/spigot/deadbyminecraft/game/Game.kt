@@ -1,14 +1,11 @@
 package org.wordandahalf.spigot.deadbyminecraft.game
 
-import net.kyori.adventure.identity.Identity
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextColor
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
-import org.wordandahalf.spigot.deadbyminecraft.game.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.game.player.roles.killer.KillerRole
-import org.wordandahalf.spigot.deadbyminecraft.game.states.GameState
-import org.wordandahalf.spigot.deadbyminecraft.game.states.LobbyState
-import org.wordandahalf.spigot.deadbyminecraft.game.worlds.Worlds
+import org.wordandahalf.spigot.deadbyminecraft.actions.Actions
+import org.wordandahalf.spigot.deadbyminecraft.actions.PlayerJoinAction
+import org.wordandahalf.spigot.deadbyminecraft.actions.PlayerLeaveAction
+import org.wordandahalf.spigot.deadbyminecraft.player.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.player.roles.killer.KillerRole
+import org.wordandahalf.spigot.deadbyminecraft.worlds.Worlds
 
 /**
  * Represents a game of Dead by Minecraft and all associated data.
@@ -20,61 +17,46 @@ class Game(val id: Int, val maxPlayers: Int)
     val lobbyWorld = Worlds.cloneLobby()
     val gameWorld = Worlds.cloneGame()
 
-    var state : GameState = LobbyState(this)
-        set(newState)
-        {
-            field.onLeave()
-            field = newState
-        }
-
     fun stop()
-    {
-        state.onLeave()
-        removeAllPlayers()
-    }
-
-    //
-    // Player management functions
-    //
-
-    fun addPlayer(player: DeadByMinecraftPlayer) : Boolean
-    {
-        if(!players.contains(player))
-        {
-            state.onPlayerJoin(player)
-            sendMessage(Component.text().content(player.bukkit.displayName + " has joined the game!").color(TextColor.fromHexString("E8E8E8")).build())
-            players.add(player)
-            player.data.gameID = id
-            // player.saveData()
-            return true
-        }
-
-        return false
-    }
-
-    fun removeAllPlayers()
     {
         val it = players.iterator()
         while(it.hasNext())
         {
             val player = it.next()
 
-            state.onPlayerLeave(player)
+            Actions.submit(PlayerLeaveAction(player.bukkit.world, player))
             player.data.gameID = null
-            // player.deleteData()
+
             it.remove()
         }
+
+        lobbyWorld.dispose()
+        gameWorld.dispose()
+    }
+
+    fun addPlayer(player: DeadByMinecraftPlayer) : Boolean
+    {
+        if(!players.contains(player))
+        {
+            players.add(player)
+            player.data.gameID = id
+            Actions.submit(PlayerJoinAction(lobbyWorld.bukkit, player))
+
+            return true
+        }
+
+        return false
     }
 
     fun removePlayer(player: DeadByMinecraftPlayer) : Boolean
     {
         if(players.contains(player))
         {
-            state.onPlayerLeave(player)
-            sendMessage(Component.text().content(player.bukkit.displayName + " has left the game!").color(TextColor.fromHexString("E8E8E8")).build())
+            Actions.submit(PlayerLeaveAction(player.bukkit.world, player))
+
             player.data.gameID = null
-            // player.deleteData()
             players.remove(player)
+
             return true
         }
 
@@ -87,15 +69,4 @@ class Game(val id: Int, val maxPlayers: Int)
     }
 
     fun numberOfPlayers() : Int { return players.size }
-
-    //
-    // World functions
-    //
-
-    fun sendMessage(message: Component)
-    {
-        players.forEach {
-            DeadByMinecraft.Audience.player(it.bukkit).sendMessage(Identity.nil(), message)
-        }
-    }
 }

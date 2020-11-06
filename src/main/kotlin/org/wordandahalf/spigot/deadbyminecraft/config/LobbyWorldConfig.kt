@@ -4,10 +4,14 @@ import ninja.leaping.configurate.ConfigurationNode
 import ninja.leaping.configurate.objectmapping.ObjectMapper
 import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
+import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.DefaultLobbyBehavior
 
 @ConfigSerializable
 class LobbyWorldConfig
 {
+    @Setting
+    val behavior : String = DefaultLobbyBehavior::class.java.simpleName
+
     @Setting
     val time = 18000L
 
