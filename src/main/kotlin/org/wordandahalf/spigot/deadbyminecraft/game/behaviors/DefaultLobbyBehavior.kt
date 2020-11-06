@@ -93,9 +93,4 @@ class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyB
 
         player.userInterface.bossBar(null)
     }
-
-    override fun dispose()
-    {
-
-    }
 }

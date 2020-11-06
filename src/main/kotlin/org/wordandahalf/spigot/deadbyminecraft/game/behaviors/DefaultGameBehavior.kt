@@ -25,9 +25,4 @@ class DefaultGameBehavior(config: GameWorldConfig, world: GameWorld) : GameBehav
     {
         action.player.bukkit.sendMessage("You left a game!")
     }
-
-    override fun dispose()
-    {
-        
-    }
 }

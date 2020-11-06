@@ -96,4 +96,9 @@ abstract class Behavior(val world: World) : Disposable
         // -> will submit action to the behavior registered with lobbyWorld
         // Register this instance with the EventManager for event distribution
     }
+
+    override fun dispose()
+    {
+        Actions.deregister(this)
+    }
 }
