@@ -4,27 +4,35 @@ import net.citizensnpcs.api.CitizensAPI
 import net.citizensnpcs.api.npc.NPC
 import net.kyori.adventure.bossbar.BossBar
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.entity.EntityType
+import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
-import org.wordandahalf.spigot.deadbyminecraft.actions.ActionHandler
-import org.wordandahalf.spigot.deadbyminecraft.actions.PlayerJoinAction
-import org.wordandahalf.spigot.deadbyminecraft.actions.PlayerLeaveAction
+import org.bukkit.util.Vector
+import org.wordandahalf.spigot.deadbyminecraft.actions.*
 import org.wordandahalf.spigot.deadbyminecraft.config.Config
 import org.wordandahalf.spigot.deadbyminecraft.config.LobbyWorldConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.items.menu.HotbarMenu
+import org.wordandahalf.spigot.deadbyminecraft.player.roles.SurvivorRole
+import org.wordandahalf.spigot.deadbyminecraft.player.roles.killer.KillerRole
 import org.wordandahalf.spigot.deadbyminecraft.player.ui.elements.StaticBar
 import org.wordandahalf.spigot.deadbyminecraft.player.ui.elements.StaticText
+import org.wordandahalf.spigot.deadbyminecraft.player.ui.elements.animations.RevealingText
 import org.wordandahalf.spigot.deadbyminecraft.worlds.LobbyWorld
 
 class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyBehavior(config, world)
 {
     private val playerNpcs : Array<NPC?> = arrayOfNulls(Config.Main.maxPlayers)
 
-    init
+    override fun dispose()
     {
-        DeadByMinecraft.Logger.info("A ${DefaultLobbyBehavior::class.java.simpleName} has been constructed for world '${world.bukkit.name}'")
+        super.dispose()
+
+        playerNpcs.forEach {
+            it?.destroy()
+            it?.owningRegistry?.deregister(it)
+        }
     }
 
     @ActionHandler
@@ -32,7 +40,7 @@ class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyB
     {
         val player = action.player
 
-        // If there is an available position and NPCs are enabled
+        // If there is a position available and NPCs are enabled, spawn a NPC for the player.
         if(playerNpcs.indexOf(null) != -1 && config.npcs.enabled)
         {
             val nextIndex = playerNpcs.indexOf(null)
@@ -58,11 +66,16 @@ class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyB
                 )
         )
 
-        // Teleport the player
+        // Teleport the player.
         val location = config.spawn.location
         val rotation = config.spawn.rotation
 
         player.bukkit.teleport(Location(world, location[0], location[1], location[2], rotation[0], rotation[1]))
+
+        player.bukkit.gameMode = GameMode.ADVENTURE
+        player.bukkit.velocity = Vector().zero()
+        player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0, true, false, false))
+        player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, true, false, false))
     }
 
     @ActionHandler
@@ -70,7 +83,7 @@ class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyB
     {
         val player = action.player
 
-        // Remove the player's NPC
+        // Remove the player's NPC.
         for (i in playerNpcs.indices)
         {
             val npc = playerNpcs[i]
@@ -88,9 +101,75 @@ class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyB
         player.bukkit.removePotionEffect(PotionEffectType.INVISIBILITY)
         player.bukkit.teleport(Bukkit.getWorld(Config.Main.defaultWorldName)!!.spawnLocation)
 
-        // Remove any hotbar menu
+        // Remove any hotbar menu.
         HotbarMenu.EMPTY.display(player.bukkit)
 
         player.userInterface.bossBar(null)
+    }
+
+    @ActionHandler
+    fun playerChoosesSurvivorRole(action: PlayerChooseSurvivorRoleAction)
+    {
+        val player = action.player
+
+        // If the player is a killer, teleport them to the spawn.
+        if(player.data.role is KillerRole)
+        {
+            val location = config.spawn.location
+            val rotation = config.spawn.rotation
+
+            player.bukkit.teleport(Location(player.bukkit.world, location[0], location[1], location[2], rotation[0], rotation[1]))
+        }
+
+        // Display the survivor menu.
+        HotbarMenu.Lobby.SURVIVOR_MENU.display(player.bukkit)
+
+        player.data.role = SurvivorRole()
+
+        // Display a message.
+        player.userInterface.subtitle(
+            RevealingText(
+                    1000,
+                    "<color:#FFFBCD><italic>You chose to be a <color:#33FF33><bold>${player.data.role.toString()}</bold><color:#FFFBCD>!",
+            )
+        )
+    }
+
+    @ActionHandler
+    fun playerChoosesKillerRole(action: PlayerChooseKillerRoleAction)
+    {
+        val player = action.player
+
+        // If the player is not already a killer and the game has enough killers, display a message.
+        if(player.data.role !is KillerRole && player.data.getGame()!!.getKillerRatio() >= Config.Main.killerRatio)
+        {
+            player.userInterface.subtitle(
+                RevealingText(1000, "<color:#FFFBCD>The killer limit has been reached.")
+            )
+
+            return
+        }
+
+        // If the player is not already a killer, teleport them to the killer position.
+        if(player.data.role !is KillerRole)
+        {
+            val location = config.killerPosition.location
+            val rotation = config.killerPosition.rotation
+
+            player.bukkit.teleport(Location(player.bukkit.world, location[0], location[1], location[2], rotation[0], rotation[1]))
+        }
+
+        // Display the killer's ability menu.
+        HotbarMenu.Lobby.KILLER_MENU.display(player.bukkit)
+
+        player.data.role = action.role
+
+        // Display a message.
+        player.userInterface.subtitle(
+                RevealingText(
+                        1000,
+                        "<italic><color:#FFFBCD>You chose to be the <bold><color:#990000>${player.data.role.toString()}</bold><color:#FFFBCD>!"
+                )
+        )
     }
 }

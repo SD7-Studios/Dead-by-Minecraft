@@ -3,6 +3,9 @@ package org.wordandahalf.spigot.deadbyminecraft.game.items
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
+import org.wordandahalf.spigot.deadbyminecraft.actions.Actions
+import org.wordandahalf.spigot.deadbyminecraft.actions.PlayerChooseKillerRoleAction
+import org.wordandahalf.spigot.deadbyminecraft.actions.PlayerChooseSurvivorRoleAction
 import org.wordandahalf.spigot.deadbyminecraft.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.player.roles.SurvivorRole
 import org.wordandahalf.spigot.deadbyminecraft.player.roles.killer.KillerRole
@@ -22,19 +25,9 @@ class SelectSurvivorItem : ScriptableItemStack(Executor())
     {
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
-            // Give the player the survivor role
             val player = DeadByMinecraftPlayer.of(t.player)
-            player.data.role = SurvivorRole()
-            // Display the survivor menu
-            HotbarMenu.Lobby.SURVIVOR_MENU.display(t.player)
 
-            // Display a message
-            player.userInterface.subtitle(
-                RevealingText(
-                        1000,
-                    "<color:#FFFBCD><italic>You chose to be a <color:#33FF33><bold>${player.data.role.toString()}</bold><color:#FFFBCD>!",
-                )
-            )
+            Actions.submit(PlayerChooseSurvivorRoleAction(player.bukkit.world, player))
         }
     }
 
@@ -47,21 +40,7 @@ class SelectKillerItem : ScriptableItemStack(Executor())
     {
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
-            val player = DeadByMinecraftPlayer.of(t.player)
-            val game = player.data.getGame()
-
-            if(game?.hasKiller() == false)
-            {
-                // Display the killer selection menu
-                HotbarMenu.Lobby.KILLER_SELECTION_MENU.display(t.player)
-            }
-            else
-            {
-                // Display a message
-                player.userInterface.subtitle(
-                    RevealingText(1000, "<color:#FFFBCD>The killer limit has been reached.")
-                )
-            }
+            HotbarMenu.Lobby.KILLER_SELECTION_MENU.display(t.player)
         }
     }
 
@@ -74,19 +53,9 @@ abstract class SelectKillerRoleItem(killerRole: Class<out KillerRole>) : Scripta
     {
         override fun accept(t: PlayerInteractEvent, u: ItemStack)
         {
-            // Give the player the killer role
             val player = DeadByMinecraftPlayer.of(t.player)
-            player.data.role = killerRole.getConstructor().newInstance()
-            // Display the survivor menu
-            HotbarMenu.Lobby.KILLER_MENU.display(t.player)
 
-            // Display a message
-            player.userInterface.subtitle(
-                RevealingText(
-                    1000,
-                    "<italic><color:#FFFBCD>You chose to be the <bold><color:#990000>${player.data.role.toString()}</bold><color:#FFFBCD>!"
-                )
-            )
+            Actions.submit(PlayerChooseKillerRoleAction(player.bukkit.world, player, killerRole.getConstructor().newInstance()))
         }
     }
 }

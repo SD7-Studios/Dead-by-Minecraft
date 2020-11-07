@@ -1,6 +1,7 @@
 package org.wordandahalf.spigot.deadbyminecraft.game.items.menu
 
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.wordandahalf.spigot.deadbyminecraft.player.DeadByMinecraftPlayer
 import org.wordandahalf.spigot.deadbyminecraft.game.items.*
 import java.security.InvalidParameterException
@@ -14,10 +15,10 @@ class HotbarMenu(private vararg val items: ScriptableItemStack?)
 
     object Lobby
     {
-        val DEFAULT_MENU            = HotbarMenu(SelectSurvivorItem(), SelectKillerItem())
-        val SURVIVOR_MENU           = HotbarMenu(null, null, null, null, null, null, null, null, GoBackItem { t, _ -> DeadByMinecraftPlayer.of(t.player).data.role = null; DEFAULT_MENU.display(t.player) })
+        val DEFAULT_MENU            = HotbarMenu(SelectSurvivorItem(), SelectKillerItem(), null, null, null, null, null, null, null)
+        val SURVIVOR_MENU           = HotbarMenu(null, null, null, null, null, null, null, null, GoBackItem { t, _ -> DEFAULT_MENU.display(t.player) })
         val KILLER_SELECTION_MENU   = HotbarMenu(SelectTrapperItem(), SelectWraithItem(), SelectNurseItem(), null, null, null, null, null, GoBackItem { t, _ -> DEFAULT_MENU.display(t.player) })
-        val KILLER_MENU             = HotbarMenu(null, null, null, null, null, null, null, null, GoBackItem { t, _ -> DeadByMinecraftPlayer.of(t.player).data.role = null; KILLER_SELECTION_MENU.display(t.player) })
+        val KILLER_MENU             = HotbarMenu(null, null, null, null, null, null, null, null, GoBackItem { t, _ -> KILLER_SELECTION_MENU.display(t.player) })
     }
 
     init
@@ -28,16 +29,12 @@ class HotbarMenu(private vararg val items: ScriptableItemStack?)
 
     fun display(player: Player)
     {
-        for(i in 0..8)
-        {
-            if(i < items.size && items[i] is ScriptableItemStack)
-            {
-                player.inventory.setItem(i, items[i]?.toItemStack())
-            }
+        items.forEachIndexed {
+            i, item ->
+            if(item is ScriptableItemStack)
+                player.inventory.setItem(i, items[i]!!.toItemStack())
             else
-            {
                 player.inventory.setItem(i, null)
-            }
         }
     }
 }

@@ -63,9 +63,9 @@ class Game(val id: Int, val maxPlayers: Int)
         return false
     }
 
-    fun hasKiller() : Boolean
+    fun getKillerRatio() : Double
     {
-        return players.any { it.data.role is KillerRole }
+        return players.count { it.data.role is KillerRole }.toDouble() / players.size.toDouble()
     }
 
     fun numberOfPlayers() : Int { return players.size }
