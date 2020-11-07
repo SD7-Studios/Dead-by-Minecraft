@@ -25,11 +25,9 @@ data class PlayerInterface(private val player : DeadByMinecraftPlayer) : Disposa
     private var actionBar : Text? = null
 
     // TODO: Scoreboard private val scoreboard = List<DeadByMinecraftPlayerInterfaceText?>(15) { null }
-    // TODO: BossBar
 
     override fun dispose()
     {
-        DeadByMinecraft.Logger.info("Disposing of UI!")
         bossBar?.dispose()
         title?.dispose()
         subtitle?.dispose()
