@@ -118,6 +118,7 @@ class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyB
             val location = config.spawn.location
             val rotation = config.spawn.rotation
 
+            player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20, 0, true, false, false))
             player.bukkit.teleport(Location(player.bukkit.world, location[0], location[1], location[2], rotation[0], rotation[1]))
         }
 
@@ -156,6 +157,7 @@ class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyB
             val location = config.killerPosition.location
             val rotation = config.killerPosition.rotation
 
+            player.bukkit.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20, 0, true, false, false))
             player.bukkit.teleport(Location(player.bukkit.world, location[0], location[1], location[2], rotation[0], rotation[1]))
         }
 
