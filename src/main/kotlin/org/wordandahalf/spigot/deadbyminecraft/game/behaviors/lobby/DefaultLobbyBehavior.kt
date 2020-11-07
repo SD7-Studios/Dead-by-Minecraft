@@ -1,4 +1,4 @@
-package org.wordandahalf.spigot.deadbyminecraft.game.behaviors
+package org.wordandahalf.spigot.deadbyminecraft.game.behaviors.lobby
 
 import net.citizensnpcs.api.CitizensAPI
 import net.citizensnpcs.api.npc.NPC
@@ -57,13 +57,13 @@ class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyB
 
         // Display the bossbar
         player.userInterface.bossBar(
-                StaticBar(
-                        StaticText("<red>DeadByMinecraft Lobby #${player.data.gameID}"),
-                        BossBar.Color.RED,
-                        BossBar.Overlay.PROGRESS,
-                        BossBar.Flag.CREATE_WORLD_FOG,
-                        BossBar.Flag.DARKEN_SCREEN
-                )
+            StaticBar(
+                StaticText("<red>DeadByMinecraft Lobby #${player.data.gameID}"),
+                BossBar.Color.RED,
+                BossBar.Overlay.PROGRESS,
+                BossBar.Flag.CREATE_WORLD_FOG,
+                BossBar.Flag.DARKEN_SCREEN
+            )
         )
 
         // Teleport the player.
@@ -168,10 +168,10 @@ class DefaultLobbyBehavior(config: LobbyWorldConfig, world: LobbyWorld) : LobbyB
 
         // Display a message.
         player.userInterface.subtitle(
-                RevealingText(
-                        1000,
-                        "<italic><color:#FFFBCD>You chose to be the <bold><color:#990000>${player.data.role.toString()}</bold><color:#FFFBCD>!"
-                )
+            RevealingText(
+                    1000,
+                    "<italic><color:#FFFBCD>You chose to be the <bold><color:#990000>${player.data.role.toString()}</bold><color:#FFFBCD>!"
+            )
         )
     }
 }

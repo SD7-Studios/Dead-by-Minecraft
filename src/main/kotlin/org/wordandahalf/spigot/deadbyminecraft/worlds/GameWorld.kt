@@ -6,7 +6,7 @@ import org.bukkit.GameRule
 import org.bukkit.World
 import org.wordandahalf.spigot.deadbyminecraft.config.GameWorldConfig
 import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.Behavior
-import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.GameBehavior
+import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.game.GameBehavior
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Disposable
 import java.security.InvalidParameterException
 

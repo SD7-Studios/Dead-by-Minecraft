@@ -6,6 +6,10 @@ import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.actions.Actions
 import org.wordandahalf.spigot.deadbyminecraft.config.GameWorldConfig
 import org.wordandahalf.spigot.deadbyminecraft.config.LobbyWorldConfig
+import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.game.DefaultGameBehavior
+import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.game.GameBehavior
+import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.lobby.DefaultLobbyBehavior
+import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.lobby.LobbyBehavior
 import org.wordandahalf.spigot.deadbyminecraft.worlds.GameWorld
 import org.wordandahalf.spigot.deadbyminecraft.worlds.LobbyWorld
 

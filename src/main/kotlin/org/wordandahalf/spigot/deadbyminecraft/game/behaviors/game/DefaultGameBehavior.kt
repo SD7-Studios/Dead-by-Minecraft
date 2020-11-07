@@ -1,4 +1,4 @@
-package org.wordandahalf.spigot.deadbyminecraft.game.behaviors
+package org.wordandahalf.spigot.deadbyminecraft.game.behaviors.game
 
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.actions.ActionHandler

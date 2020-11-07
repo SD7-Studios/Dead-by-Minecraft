@@ -4,7 +4,7 @@ import ninja.leaping.configurate.ConfigurationNode
 import ninja.leaping.configurate.objectmapping.ObjectMapper
 import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
-import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.DefaultGameBehavior
+import org.wordandahalf.spigot.deadbyminecraft.game.behaviors.game.DefaultGameBehavior
 
 @ConfigSerializable
 class GameWorldConfig
