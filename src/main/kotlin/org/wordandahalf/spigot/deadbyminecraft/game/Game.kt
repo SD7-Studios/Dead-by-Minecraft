@@ -4,6 +4,7 @@ import org.wordandahalf.spigot.deadbyminecraft.actions.Actions
 import org.wordandahalf.spigot.deadbyminecraft.actions.PlayerJoinAction
 import org.wordandahalf.spigot.deadbyminecraft.actions.PlayerLeaveAction
 import org.wordandahalf.spigot.deadbyminecraft.player.DeadByMinecraftPlayer
+import org.wordandahalf.spigot.deadbyminecraft.player.roles.SurvivorRole
 import org.wordandahalf.spigot.deadbyminecraft.player.roles.killer.KillerRole
 import org.wordandahalf.spigot.deadbyminecraft.worlds.Worlds
 
@@ -63,10 +64,23 @@ class Game(val id: Int, val maxPlayers: Int)
         return false
     }
 
+    fun numberOfPlayers() : Int { return players.size }
+
+    fun numberOfSurvivors() : Int
+    {
+        return players.count { it.data.role is SurvivorRole }
+    }
+
+    fun numberOfKillers() : Int
+    {
+        return players.count { it.data.role is KillerRole }
+    }
+
+    /**
+     * @return The ratio of killers to total number of players
+     */
     fun getKillerRatio() : Double
     {
         return players.count { it.data.role is KillerRole }.toDouble() / players.size.toDouble()
     }
-
-    fun numberOfPlayers() : Int { return players.size }
 }

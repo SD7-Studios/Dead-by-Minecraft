@@ -17,7 +17,8 @@ class DefaultGameBehavior(config: GameWorldConfig, world: GameWorld) : GameBehav
     @ActionHandler
     fun onPlayerJoin(action: PlayerJoinAction)
     {
-        action.player.bukkit.sendMessage("You joined a game!")
+        val player = action.player
+        player.bukkit.teleport(world.spawnLocation)
     }
 
     @ActionHandler

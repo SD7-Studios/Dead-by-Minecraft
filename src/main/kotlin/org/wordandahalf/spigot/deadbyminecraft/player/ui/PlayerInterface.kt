@@ -6,7 +6,7 @@ import net.kyori.adventure.title.Title
 import net.kyori.adventure.util.Ticks
 import org.wordandahalf.spigot.deadbyminecraft.DeadByMinecraft
 import org.wordandahalf.spigot.deadbyminecraft.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.player.ui.elements.Bar
+import org.wordandahalf.spigot.deadbyminecraft.player.ui.elements.bar.Bar
 import org.wordandahalf.spigot.deadbyminecraft.player.ui.elements.Text
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Scheduler
 import org.wordandahalf.spigot.deadbyminecraft.scheduling.Disposable
@@ -39,7 +39,7 @@ data class PlayerInterface(private val player : DeadByMinecraftPlayer) : Disposa
     override fun tick()
     {
         // Update the interface components
-        bossBar?.dispose()
+        bossBar?.tick()
         title?.tick()
         subtitle?.tick()
         actionBar?.tick()

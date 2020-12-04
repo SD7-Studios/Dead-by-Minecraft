@@ -26,6 +26,12 @@ class Config
     @Setting(value = "default-world-name")
     val defaultWorldName = "world"
 
+    @Setting
+    val resourcePackUrl = "https://wordandahalf.blob.core.windows.net/dead-by-minecraft/Dead-by-Minecraft-Resource-Pack.zip"
+
+    @Setting
+    val resourcePackHash = "A8516ABF8BE706DFC0C4CE2727A93DCBB3F275E9"
+
     private fun saveTo(node: ConfigurationNode)
     {
         MAPPER.bind(this).serialize(node)

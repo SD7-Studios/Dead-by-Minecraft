@@ -62,6 +62,15 @@
   </build>
   <repositories>
     <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots />
+      <id>sonatype.oss.snapshots</id>
+      <name>Sonatype OSS Snapshot Repository</name>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+    <repository>
       <id>glaremasters</id>
       <url>https://repo.glaremasters.me/repository/concuncan/</url>
     </repository>
@@ -76,15 +85,6 @@
     <repository>
       <id>everything</id>
       <url>http://repo.citizensnpcs.co/</url>
-    </repository>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots />
-      <id>sonatype.oss.snapshots</id>
-      <name>Sonatype OSS Snapshot Repository</name>
-      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
   </repositories>
   <dependencies>

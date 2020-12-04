@@ -8,17 +8,20 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
+import org.wordandahalf.spigot.deadbyminecraft.config.Config
 import org.wordandahalf.spigot.deadbyminecraft.game.Game
 import org.wordandahalf.spigot.deadbyminecraft.player.DeadByMinecraftPlayer
-import org.wordandahalf.spigot.deadbyminecraft.game.states.LobbyState
 import org.wordandahalf.spigot.deadbyminecraft.game.items.ScriptableItemStack
 
 class EventListener : Listener {
     @EventHandler
-            /**
-             * Handles the edge case when a player is disconnected from a game without it ending
-             */
+    /**
+     * Handles resource pack and the edge case when a player is disconnected from a game without it ending
+     */
     fun onPlayerJoin(e: PlayerJoinEvent) {
+        if(Config.Main.resourcePackUrl != "")
+            e.player.setResourcePack(Config.Main.resourcePackUrl, Config.Main.resourcePackHash.chunked(2).map { it.toUpperCase().toInt(16).toByte() }.toByteArray())
+
         val player = DeadByMinecraftPlayer.of(e.player)
 
         if (player.data.gameID is Int) {
